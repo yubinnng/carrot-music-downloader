@@ -1,0 +1,260 @@
+.home-page-header {
+    width: 100%;
+    height: 59px;
+
+    background-color: #5A5A5A;
+
+    border: 1px solid #707070;
+}
+
+
+.home-page-header p {
+    width: 226px;
+    height: 14px;
+
+    font-size: 10px;
+    font-family: Regular;
+
+    color: #ffffff;
+}
+
+.home-page-header input {
+    width: 174px;
+    height: 32px;
+
+    margin-left: 200.8px;
+
+    border: 1px solid #707070;
+    border-radius: 10px;
+
+    font-size: 12px;
+    font-family: Regular;
+
+    padding-left: 10px;
+}
+
+
+.home-page-header img:first-child {
+    width: 114px;
+    height: 40px;
+
+    margin-left: 16px;
+}
+
+.home-page-header img:nth-child(3) {
+    width: 22px;
+    height: 22px;
+
+    margin-left: 10px;
+}
+
+.home-page-header img:nth-child(4) {
+    width: 19.5px;
+    height: 2.5px;
+
+    margin-left: 18px;
+}
+
+.home-page-header img:last-child {
+    width: 17px;
+    height: 17px;
+    margin-left: 18px;
+}
+
+.home-page-content {
+    width: 100%;
+
+    overflow: hidden;
+}
+
+.content-border {
+    border: .5px solid #D8D8D8;
+}
+
+.platform-content-container {
+    width: 114px;
+    height: 440px;
+}
+
+.platform-content {
+    width: 114px;
+    height: 335px;
+
+    overflow: auto;
+}
+
+
+.platform-content::-webkit-scrollbar {
+    display: none;
+}
+
+.platform-content .platform-item {
+    width: 113px;
+    height: 48px;
+    background-color: #ffffff;
+
+    cursor: pointer;
+}
+
+.platform-content .platform-active {
+    background-color: #E9E9E9;
+}
+
+.platform-content .platform-item p {
+    width: 75px;
+    height: 20px;
+
+    line-height: 20px;
+
+    font-size: 15px;
+    font-family: "Segoe UI Semibold";
+
+    color: #5A5A5A;
+
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+
+.app-msg-content {
+    width: 114px;
+    height: 105px;
+    background-color: #ffffff;
+
+    border-top: 1px solid #D8D8D8;
+}
+
+.app-msg-content .text {
+    width: 86px;
+    height: 42px;
+
+    margin-bottom: 10px;
+
+    font-size: 10px;
+    font-family: Regular;
+
+    text-align: center;
+    line-height: 12px;
+    letter-spacing: .5px;
+
+    color: #5A5A5A;
+}
+
+.app-msg-content>div {
+    width: 90px;
+    height: 50px;
+}
+
+.app-msg-content>div>div {
+    cursor: pointer;
+    margin-top: 2px;
+}
+
+.app-msg-content p {
+    font-size: 10px;
+    font-family: Regular;
+
+    color: #5A5A5A;
+}
+
+
+
+.app-msg-content img {
+    margin-left: 4px;
+}
+
+.content-split {
+    flex: 1;
+    height: 440px;
+
+    background-color: #D8D8D8;
+}
+
+.music-content {
+    width: 534px;
+    height: 440px;
+
+    border-left: 0;
+    border-bottom: 0;
+}
+
+.music-content .music-menu {
+    width: 534px;
+    height: 48px;
+
+    border-left: 0;
+    border-top: 0;
+    border-bottom: 1px solid #D8D8D8;
+}
+
+.music-content .music-menu p {
+    font-size: 15px;
+    font-weight: bold;
+    font-family: Semibold;
+}
+
+.music-content .music-menu input {
+    width: 361px;
+    height: 24px;
+
+}
+
+.music-content .music-menu img {
+    width: 23.3px;
+    height: 18.3px;
+
+    cursor: pointer;
+}
+
+.music-content .music-menu img:last-child {
+    width: 20.5px;
+    height: 20.5px;
+}
+
+.music-item-content {
+    width: 100%;
+    height: 390px;
+
+    overflow: auto;
+}
+
+.music-item-content div {
+    height: 25px;
+
+    border-bottom: 1px solid #D8D8D8;
+}
+
+.music-item-content div p {
+    font-size: 10px;
+    font-family: Semibold;
+
+    color: #5A5A5A;
+
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+
+.music-item-content div img {
+    width: 15px;
+    height: 15px;
+
+    margin-left: 12px;
+}
+
+.music-item-content div p:nth-child(2) {
+    width: 180px;
+
+    margin-left: 13px;
+}
+
+.music-item-content div p:nth-child(3) {
+    width: 40px;
+
+    margin-left: 38px;
+}
+
+.music-item-content div p:last-child {
+    width: 120px;
+    margin-left: 38px;
+}
