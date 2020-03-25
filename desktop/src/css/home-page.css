@@ -20,9 +20,9 @@
 
 .home-page-header input {
     width: 174px;
-    height: 32px;
+    height: 28px;
 
-    margin-left: 215.8px;
+    margin-left: 219.8px;
 
     border: 1px solid #707070;
     border-radius: 10px;
@@ -57,7 +57,7 @@
     width: 22px;
     height: 22px;
 
-    margin-left: 16px;
+    margin-left: 11.5px;
 }
 
 .home-page-header div:nth-child(4) img {
@@ -69,7 +69,7 @@
     width: 22px;
     height: 22px;
 
-    margin-left: 16px;
+    margin-left: 11.5px;
 }
 
 .home-page-header div:last-child img {
@@ -94,7 +94,7 @@
 
 .platform-content {
     width: 114px;
-    height: 335px;
+    height: 301px;
 
     overflow: auto;
 }
@@ -134,7 +134,7 @@
 
 .app-msg-content {
     width: 114px;
-    height: 105px;
+    height: 140px;
     background-color: #ffffff;
 
     border-top: 1px solid #D8D8D8;
@@ -163,7 +163,7 @@
 
 .app-msg-content>div>div {
     cursor: pointer;
-    margin-top: 2px;
+    margin-top: 10px;
 }
 
 .app-msg-content p {
@@ -203,28 +203,49 @@
     border-bottom: 1px solid #D8D8D8;
 }
 
-.music-content .music-menu p {
+.music-content .music-menu p:nth-child(2) {
+    font-size: 10px;
+    font-family: Regular;
+
+    margin-left: 4px;
+}
+
+.music-content .music-menu p:nth-child(3) {
     font-size: 15px;
     font-weight: bold;
     font-family: Semibold;
+
+    margin-left: 11px;
 }
 
 .music-content .music-menu input {
-    width: 361px;
+    width: 317px;
     height: 24px;
 
+    margin-left: 6px;
 }
 
 .music-content .music-menu img {
     width: 23.3px;
     height: 18.3px;
 
+    margin-left: 16.2px;
+
     cursor: pointer;
+}
+
+.music-content .music-menu img:first-child {
+    width: 15px;
+    height: 15px;
+
+    margin-left: 12px;
 }
 
 .music-content .music-menu img:last-child {
     width: 20.5px;
     height: 20.5px;
+
+    margin-left: 11.9px;
 }
 
 .music-item-content {

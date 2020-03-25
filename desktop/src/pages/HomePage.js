@@ -64,7 +64,7 @@ class HomePage extends React.Component {
           <img src = {require('../assets/icon/logo.svg')} alt = '' />
           <input
             className = 'no-drag'
-            type = 'text' placeholder = '输入歌名或歌手名' />
+            type = 'text' placeholder = '输入歌名/歌手名/歌单ID' />
           <Column
             className = 'no-drag'
           >
@@ -134,8 +134,10 @@ class HomePage extends React.Component {
           >
             <Row
               className = 'music-menu content-border'
-              justify = 'space-around'
+              justify = 'flex-start'
             >
+              <img src = {require('../assets/icon/radio.svg')} alt = '' />
+              <p>全选</p>
               <p>下载位置</p>
               <input type = 'text' />
               <img src = {require('../assets/icon/file.svg')} alt = '' />
