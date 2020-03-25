@@ -33,28 +33,38 @@ class ResultWrapper():
 
 # 搜索表单
 class SearchForm:
+
+    # 歌曲平台
+    platform: str
+
+    # 搜索值
+    keyword: str
+
+    # 结果个数
+    size: int
+
     def __init__(self, keyword=None, platform=None, size=30):
         self.keyword = keyword
         self.platform = platform
         self.size = size
 
-    platform: str
 
-    keyword: str
-
-    size: int
-
-
-# 音乐实体类
+# 歌曲实体类
 class Song(BaseClass):
+
+    # 歌曲平台
     platform: str
 
+    # 歌曲ID
     id: str
 
+    # 歌曲名
     name: str
 
+    # 歌手
     singers: List[str]
 
+    # 专辑
     album: str
 
     def __init__(self, platform=None, id=None, name=None, singers=None, album=None) -> None:
