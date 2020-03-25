@@ -4,3 +4,11 @@
     width: 650px;
     height: 500px;
 }
+
+.no-drag {
+    -webkit-app-region: no-drag
+}
+
+.drag {
+    -webkit-app-region: drag
+}

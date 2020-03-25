@@ -58,22 +58,37 @@ class HomePage extends React.Component {
         className = 'wrapper'
       >
         <Row
-          className = 'home-page-header'
+          className = 'drag home-page-header'
           justify = 'flex-start'
         >
           <img src = {require('../assets/icon/logo.svg')} alt = '' />
-          <input type = 'text' placeholder = '输入歌名或歌手名' />
-          <img src = {require('../assets/icon/search.svg')} alt = '' />
-          <img
-            src = {require('../assets/icon/min.svg')}
-            alt = ''
+          <input
+            className = 'no-drag'
+            type = 'text' placeholder = '输入歌名或歌手名' />
+          <Column
+            className = 'no-drag'
+          >
+            <img src = {require('../assets/icon/search.svg')} alt = '' />
+          </Column>
+          <Column
+            className = 'no-drag'
             onClick = {this.onClickMin}
-          />
-          <img
-            src = {require('../assets/icon/remove.svg')}
-            alt = ''
+          >
+            <img
+              className = 'no-drag'
+              src = {require('../assets/icon/min.svg')}
+              alt = ''
+            />
+          </Column>
+          <Column
+            className = 'no-drag'
             onClick = {this.onClickRemove}
-          />
+          >
+            <img
+              src = {require('../assets/icon/remove.svg')}
+              alt = ''
+            />
+          </Column>
         </Row>
         <Row
           className = 'home-page-content content-border'
