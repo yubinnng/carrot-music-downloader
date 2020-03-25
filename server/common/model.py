@@ -11,10 +11,14 @@ from typing import List
 
 # 响应结果包装类
 class ResultWrapper():
+
+    # 状态码
     code: int
 
+    # 消息
     msg: str
 
+    # 数据
     data: object
 
     def __init__(self, code, msg, data):
@@ -34,7 +38,7 @@ class ResultWrapper():
 # 搜索表单
 class SearchForm:
 
-    # 歌曲平台
+    # 音乐平台
     platform: str
 
     # 搜索值
@@ -52,7 +56,7 @@ class SearchForm:
 # 歌曲实体类
 class Song(BaseClass):
 
-    # 歌曲平台
+    # 音乐平台
     platform: str
 
     # 歌曲ID
