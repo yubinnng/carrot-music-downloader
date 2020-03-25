@@ -4,7 +4,7 @@
  */
 
 // 引入 electron 并创建一个 BrowserWindow
-const {app, BrowserWindow} = require("electron");
+const {app, BrowserWindow, ipcMain} = require("electron");
 const path = require("path");
 
 // 保持 window 对象的全局引用，避免 Javascript 对象被来及回收时，窗口被自动关闭
@@ -16,6 +16,7 @@ function createWindow() {
     width: 650,
     height: 500,
     frame: false,
+    resizable: false,
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, "preload.js")
@@ -53,3 +54,11 @@ app.on("activate", () => {
   }
 });
 
+ipcMain.on("remove", (event, args) => {
+  args === 200 && mainWindow.close();
+});
+
+ipcMain.on("min", (event, args) => {
+  args === 200 && mainWindow.minimize();
+
+});

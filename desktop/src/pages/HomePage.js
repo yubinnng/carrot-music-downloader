@@ -7,6 +7,8 @@ import React from "react";
 import {Row, Column} from "../component";
 import '../css/home-page.css';
 
+const {ipcRenderer}= window.electron;
+
 class HomePage extends React.Component {
 
   renderPlatformList() {
@@ -40,6 +42,16 @@ class HomePage extends React.Component {
     return arr;
   }
 
+  onClickRemove(event) {
+    event.stopPropagation();
+    ipcRenderer.send('remove', 200);
+  }
+
+  onClickMin(event) {
+    event.stopPropagation();
+    ipcRenderer.send('min', 200);
+  }
+
   render() {
     return (
       <Column
@@ -52,8 +64,16 @@ class HomePage extends React.Component {
           <img src = {require('../assets/icon/logo.svg')} alt = '' />
           <input type = 'text' placeholder = '输入歌名或歌手名' />
           <img src = {require('../assets/icon/search.svg')} alt = '' />
-          <img src = {require('../assets/icon/min.svg')} alt = '' />
-          <img src = {require('../assets/icon/remove.svg')} alt = '' />
+          <img
+            src = {require('../assets/icon/min.svg')}
+            alt = ''
+            onClick = {this.onClickMin}
+          />
+          <img
+            src = {require('../assets/icon/remove.svg')}
+            alt = ''
+            onClick = {this.onClickRemove}
+          />
         </Row>
         <Row
           className = 'home-page-content content-border'
