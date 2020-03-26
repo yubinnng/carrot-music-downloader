@@ -25,7 +25,6 @@ def download_and_save_file(file_name, save_path, download_url, headers=None, str
     """
     if not os.path.exists(save_path):
         os.mkdir(save_path)
-    logging.info('start downloading %s', file_name)
 
     with closing(requests.get(download_url, stream=True, verify=False)) as response:
         if response.status_code == 200:
@@ -35,7 +34,6 @@ def download_and_save_file(file_name, save_path, download_url, headers=None, str
                         f.write(chunk)
         else:
             raise ServerError('download request error')
-    logging.info('download successfully %s in %s', file_name, save_path)
 
 
 def bind_param(request, _class):
