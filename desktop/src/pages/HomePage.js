@@ -6,51 +6,27 @@
 import React from "react";
 import {observer} from 'mobx-react';
 import {Row, Column} from "../component";
+import stores from "../store";
+import {get} from "../util/requests";
 import '../css/home-page.css';
 
 const {ipcRenderer}= window.electron;
+const {songStore} = stores;
 
+@observer
 class HomePage extends React.Component {
-
-  renderPlatformList() {
-    let arr = [];
-    for(let i = 0; i < 10; i++) {
-      arr.push(
-        <Row
-          className = 'platform-item content-border platform-active'
-        >
-          <p>某音乐平台</p>
-        </Row>
-      )
-    }
-    return arr;
-  }
-
-  renderMusicList() {
-    let arr = [];
-    for(let i = 0; i < 10; i++) {
-      arr.push(
-        <Row
-          justify = 'flex-start'
-        >
-          <img src = {require('../assets/icon/radio.svg')} alt = '' />
-          <p>歌名歌名歌名歌名歌名歌名歌名歌名歌名</p>
-          <p>歌手歌手</p>
-          <p>专辑名专辑名专辑名专辑名</p>
-        </Row>
-      )
-    }
-    return arr;
-  }
-
-  onClickRemove(event) {
-    event.stopPropagation();
-    ipcRenderer.send('remove', 200);
-  }
-
-  onClickMin(event) {
-    event.stopPropagation();
-    ipcRenderer.send('min', 200);
+  constructor(props) {
+    super(props);
+    this.state = {
+      platform: songStore.platformList[0].platform,
+      platformIndex: 0,
+      keyword: ''
+    };
+    this.renderPlatformList = this.renderPlatformList.bind(this);
+    this.onClickPlatformItem = this.onClickPlatformItem.bind(this);
+    this.renderMusicList = this.renderMusicList.bind(this);
+    this.handleKeyChange = this.handleKeyChange.bind(this);
+    this.onClickSearchBtn = this.onClickSearchBtn.bind(this);
   }
 
   render() {
@@ -65,11 +41,17 @@ class HomePage extends React.Component {
           <img src = {require('../assets/icon/logo.svg')} alt = '' />
           <input
             className = 'no-drag'
-            type = 'text' placeholder = '输入歌名/歌手名/歌单ID' />
+            type = 'text'
+            placeholder = '输入歌名/歌手名/歌单ID'
+            value = {this.state.keyword}
+            onChange = {this.handleKeyChange}
+          />
           <Column
             className = 'no-drag'
           >
-            <img src = {require('../assets/icon/search.svg')} alt = '' />
+            <img
+              onClick = {this.onClickSearchBtn}
+              src = {require('../assets/icon/search.svg')} alt = '' />
           </Column>
           <Column
             className = 'no-drag'
@@ -97,11 +79,6 @@ class HomePage extends React.Component {
         >
           <Column className = 'platform-content-container'>
             <div className = 'platform-content'>
-              <Row
-                className = 'platform-item content-border'
-              >
-                <p>某音乐平台</p>
-              </Row>
               {this.renderPlatformList()}
             </div>
             <Row
@@ -153,6 +130,113 @@ class HomePage extends React.Component {
         </Row>
       </Column>
     )
+  }
+
+  /**
+   * 搜索
+   */
+  onClickSearchBtn(event) {
+    event.stopPropagation();
+    const {platform, keyword} = this.state;
+    get('/api/search', {
+      platform,
+      keyword,
+    })
+      .then(resp => {
+
+        if(resp.code === 200) {
+          songStore.addResultList(platform, resp.data);
+        }
+      })
+  }
+
+  /**
+   * 处理keyword改变
+   * @param event
+   */
+  handleKeyChange(event) {
+    this.setState({
+      keyword: event.target.value
+    })
+  }
+
+  /**
+   * 点击平台
+   * @param platformIndex
+   */
+  onClickPlatformItem(platform, platformIndex) {
+    this.setState(() => (
+      {
+        platform,
+        platformIndex,
+      }
+    ))
+  }
+
+  /**
+   * 渲染平台列表
+   * @returns {[]}
+   */
+  renderPlatformList() {
+    let arr = [];
+    songStore.platformList.forEach((item, index) => {
+      arr.push(
+        <Row
+          onClick={() => {
+            this.onClickPlatformItem(item.platform, index);
+          }}
+          className = {`platform-item content-border ${this.state.platformIndex === index ? 'platform-active':''}`}
+        >
+          <p>{item.value}</p>
+        </Row>
+      )
+    });
+    return arr;
+  }
+
+  /**
+   * 渲染搜索音乐结果
+   * @returns {[]}
+   */
+  renderMusicList() {
+    let arr = [];
+    songStore.resultList.forEach(item => {
+      if(item.platform === this.state.platform) {
+        item.songList.forEach(_item => {
+          arr.push(
+            <Row
+              justify = 'flex-start'
+            >
+              <img
+                src = {_item.selected ?require('../assets/icon/radio.selected.svg'): require('../assets/icon/radio.svg')}
+                alt = '' />
+              <p>{_item.name}</p>
+              <p>{_item.singers.join(' ')}</p>
+              <p>{_item.album}</p>
+            </Row>
+          )
+        })
+      }
+    });
+    return arr;
+  }
+
+  /**
+   * 点击关闭
+   * @param event
+   */
+  onClickRemove(event) {
+    event.stopPropagation();
+    ipcRenderer.send('remove', 200);
+  }
+
+  /**
+   * 点击最小化
+   * @param event
+   */
+  onClickMin(event) {
+    event.stopPropagation();
+    ipcRenderer.send('min', 200);
   }
 
 }
