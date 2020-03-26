@@ -4,6 +4,7 @@
  */
 
 import React from "react";
+import {observer} from 'mobx-react';
 import {Row, Column} from "../component";
 import '../css/home-page.css';
 
