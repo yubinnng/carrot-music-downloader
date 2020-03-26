@@ -64,7 +64,7 @@
 
 ~~~jso
 {
-	"song_id_list": ["19292984", "190778"], // 歌曲列表ID
+    "song_id_list": ["19292984", "190778"], // 歌曲列表ID
     "platform": "netease", // 音乐平台
     "save_path" : "./song" // 保存位置
 }
