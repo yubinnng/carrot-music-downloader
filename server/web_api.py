@@ -24,7 +24,8 @@ client_dict = {
 def search(search_form: SearchForm):
     # 策略模式，获取对应平台的客户端
     client = client_dict.get(search_form.platform)
-    if search_form.keyword.isalnum():
+    # 若全为数字则判定为歌单
+    if search_form.keyword.isdigit():
         result = client.get_song_list(search_form)
     else:
         result = client.search_song(search_form)
