@@ -23,16 +23,22 @@ client_dict = {
 @bind_param(request, SearchForm)
 def search(search_form: SearchForm):
     # 策略模式，获取对应平台的客户端
-    result = client_dict.get(search_form.platform).search(search_form)
+    client = client_dict.get(search_form.platform)
+    if search_form.keyword.isalnum():
+        result = client.get_song_list(search_form)
+    else:
+        result = client.search_song(search_form)
     return ResultWrapper.success(result)
 
 
 @app.route('/api/download',  methods=['POST'], endpoint="download")
-@bind_json(request, Song)
-def download(song: Song):
-    save_path = json.loads(request.get_data()).get('save_path')
+def download():
+    data = json.loads(request.get_data())
+    song_id_list = data.get('song_id_list')
+    platform = data.get('platform')
+    save_path = data.get('save_path')
     # 策略模式，获取对应平台的客户端
-    client_dict.get(song.platform).download(song, save_path)
+    client_dict.get(platform).download(song_id_list, save_path)
     return ResultWrapper.success()
 
 
