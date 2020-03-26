@@ -8,8 +8,10 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "axios": "^0.19.2",
     "customize-cra": "^0.9.1",
     "electron": "^8.1.1",
+    "http-proxy-middleware": "^1.0.3",
     "mobx": "^5.15.4",
     "mobx-react": "^6.1.8",
     "react": "^16.13.1",
@@ -19,10 +21,10 @@
   },
   "scripts": {
     "pc-start": " electron .",
-    "start":"react-app-rewired start",
-    "build":"react-app-rewired build",
-    "test":"react-app-rewired test",
-    "eject":"react-app-rewired eject"
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -38,5 +40,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:8080"
 }
