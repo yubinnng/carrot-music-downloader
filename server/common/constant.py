@@ -5,6 +5,6 @@
 @description: 常量模块
 """
 
-request_timeout = 1000
+request_timeout = 10000
 
 NETEASE = "netease"

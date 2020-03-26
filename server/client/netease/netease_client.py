@@ -6,8 +6,6 @@
 """
 import requests
 import logging
-import threading
-import time
 import threadpool
 from bs4 import BeautifulSoup
 from common.model import SearchForm, Song
