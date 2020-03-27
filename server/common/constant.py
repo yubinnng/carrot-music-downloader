@@ -7,4 +7,6 @@
 
 request_timeout = 10000
 
-NETEASE = "netease"
+NETEASE = "Netease"
+
+QQ = "QQ"
