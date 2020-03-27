@@ -6,7 +6,6 @@
 """
 import requests
 import logging
-import threadpool
 from bs4 import BeautifulSoup
 from common.model import SearchForm, Song
 from common.constant import *
@@ -29,19 +28,12 @@ class NeteaseClient(BaseClient):
             'Referer': 'https://music.163.com/',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.32 Safari/537.36'
         }
-        self.__song_url = 'https://music.163.com/song/'
+        self.__song_url_format = 'https://music.163.com/song/{song_id}'
         self.__search_url = 'http://music.163.com/weapi/cloudsearch/get/web?csrf_token='
         self.__song_list_url = 'https://music.163.com/playlist?id='
         self.__player_url = 'http://music.163.com/weapi/song/enhance/player/url?csrf_token='
-        self.__session = requests.Session()
-        self.__session.headers.update(self.__headers)
-        self.__download_pool = threadpool.ThreadPool(20)
 
     def search_song(self, search_form: SearchForm) -> List[Song]:
-        """
-        搜索歌曲
-        :return: 歌曲列表
-        """
         params = {
             's': search_form.keyword,
             'type': 1,
@@ -58,36 +50,36 @@ class NeteaseClient(BaseClient):
                     album = song.get('al').get('name')
                     name = song.get('name')
 
-                    temp_song = Song(NETEASE, id, name, singers, album)
+                    temp_song = Song(id, name, singers, album)
                     results.append(temp_song)
         return results
 
     def get_song_list(self, search_form: SearchForm) -> List[Song]:
         url = self.__song_list_url + search_form.keyword
-        song_list_page = BeautifulSoup(self.__session.get(url, headers=self.__headers).content, "html.parser")
+        song_list_page = BeautifulSoup(requests.get(url, headers=self.__headers).content, "html.parser")
         # 网易云歌单有防爬加密，只能获取到歌曲ID和歌名
-        song_list_page = song_list_page.find('ul', {'class': 'f-hide'}).find_all('a')
+        song_list = song_list_page.find('ul', {'class': 'f-hide'}).find_all('a')
 
         results = []
-        for song_page in song_list_page:
-            id = song_page['href'].strip("/song?id=")
-            name = song_page.text
-            song_page = Song(NETEASE, id, name)
-            results.append(song_page)
+        for song_item in song_list:
+            id = song_item['href'].strip("/song?id=")
+            name = song_item.text
+            song_item = Song(id, name)
+            results.append(song_item)
         return results
 
-    def __download_one_song(self, song_id, save_path: str):
-        """
-        下载单个歌曲
-        """
-        logging.debug('get song info, id = %s', song_id)
-        # 查找歌曲信息
-        song_page = BeautifulSoup(requests.get(self.__song_url + song_id, headers=self.__headers).content,"html.parser")
+    def _get_song_info(self, song_id: str) -> Song:
+        song_url = self.__song_url_format.format(song_id=song_id)
+        song_page = BeautifulSoup(requests.get(song_url, headers=self.__headers).content, "html.parser")
         singers = song_page.find('meta', attrs={'property': 'og:music:artist'}).get('content').split('/')
         name = song_page.find('meta', attrs={'property': 'og:title'}).get('content')
         album = song_page.find('meta', attrs={'property': 'og:music:album'}).get('content')
-        song = Song('netease', song_id, name, singers, album)
+        song = Song(None, name, singers, album)
+        logging.debug('get song info successfully, %s', song)
+        return song
 
+    def _download_one_song(self, song_id, save_path: str):
+        song = self._get_song_info(song_id)
         # 下载歌曲
         params = {
             'ids': [song_id],
@@ -108,27 +100,23 @@ class NeteaseClient(BaseClient):
             logging.warning('download failed %s, id = %s, msg = ', file_name, song_id)
             logging.debug(e.args)
 
-    def download(self, song_id_list: List[str], save_path: str):
-        """
-        下载歌曲
-        """
-        # 线程池异步下载
-        logging.debug('open thread pool to download')
-        params = [((song_id, save_path), None) for song_id in song_id_list]
-        # func_var = [(None, song_id_list), (None, save_path)]
-        pool_requests = threadpool.makeRequests(self.__download_one_song, params)
-        [self.__download_pool.putRequest(req) for req in pool_requests]
-
     def __requests(self, url, params):
         """
         请求网易云音乐服务器
         """
         post_data = encrypt_param(params)
 
-        response = self.__session.post(url, data=post_data, timeout=request_timeout, headers=self.__headers)
+        response = requests.post(url, data=post_data, timeout=request_timeout, headers=self.__headers)
         logging.debug('__postRequests response %s', response.text)
 
         if response.json()['code'] != 200:
             return None
         else:
             return response.json()
+
+
+if __name__ == '__main__':
+    client = NeteaseClient()
+    search_form = SearchForm("山水之间", QQ)
+    result = client.search_song(search_form)
+    client._download_one_song(result[0].id, './song')
