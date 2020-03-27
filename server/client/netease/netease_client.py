@@ -54,6 +54,7 @@ class NeteaseClient(BaseClient):
                     results.append(temp_song)
         return results
 
+    # 参考文章：https://blog.csdn.net/qq_45437557/article/details/100064217
     def get_song_list(self, search_form: SearchForm) -> List[Song]:
         url = self.__song_list_url + search_form.keyword
         song_list_page = BeautifulSoup(requests.get(url, headers=self.__headers).content, "html.parser")
