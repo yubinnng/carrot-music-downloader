@@ -5,5 +5,10 @@
 @description: 
 """
 from client.netease.netease_client import NeteaseClient
+from client.qq.qq_client import QQClient
+from common.constant import *
 
-__all__ = ['NeteaseClient']
+client_dict = {
+    NETEASE: NeteaseClient(),
+    QQ: QQClient()
+}
