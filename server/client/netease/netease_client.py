@@ -7,7 +7,7 @@
 import requests
 import logging
 from bs4 import BeautifulSoup
-from common.model import SearchForm, Song
+from common.model import SearchForm, Song, DownloadHistory
 from common.constant import *
 from common.http import download_and_save_file
 from client.basic_client import BaseClient
@@ -96,8 +96,12 @@ class NeteaseClient(BaseClient):
         try:
             logging.info('start downloading %s', file_name)
             download_and_save_file(file_name, save_path, download_url)
+            # 记录历史
+            DownloadHistory.add(song, True)
             logging.info('download successfully %s in %s', file_name, save_path)
         except Exception as e:
+            # 记录历史
+            DownloadHistory.add(song, False)
             logging.warning('download failed %s, id = %s, msg = ', file_name, song_id)
             logging.debug(e.args)
 
@@ -114,10 +118,3 @@ class NeteaseClient(BaseClient):
             return None
         else:
             return response.json()
-
-
-if __name__ == '__main__':
-    client = NeteaseClient()
-    search_form = SearchForm("山水之间", QQ)
-    result = client.search_song(search_form)
-    client._download_one_song(result[0].id, './song')

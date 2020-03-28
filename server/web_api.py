@@ -4,11 +4,10 @@
 @time: 2020/03/23
 @description: HTTP RESTFUL API
 """
-import json
 import logging
 from flask import request, Flask
 from client import client_dict
-from common.http import bind_json, bind_param
+from common.http import bind_param
 from common.common_class import ServerError
 from common.model import *
 
@@ -40,6 +39,11 @@ def download():
     # 策略模式，获取对应平台的客户端
     client_dict.get(platform).download(song_id_list, save_path)
     return ResultWrapper.success()
+
+
+@app.route('/api/history', endpoint='history')
+def history():
+    return ResultWrapper.success(DownloadHistory.get_all())
 
 
 @app.errorhandler(404)
