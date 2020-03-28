@@ -24,12 +24,12 @@ const requests = (Url, options) => {
   const {
     method = "GET",
     headers = defaultHeaders,
-    body = {},
+    data = {},
     params = {}
   } = options;
 
   // request.data
-  let data = JSON.stringify(body);
+  let body = JSON.stringify(data);
 
   // url
   let  url = `${Url}`;
@@ -38,8 +38,8 @@ const requests = (Url, options) => {
     Axios({
       method,
       url,
-      data,
       headers,
+      data: body,
       params
     })
       .then(resp => {
@@ -74,6 +74,7 @@ const get = (Url, params) => {
  */
 const post = (Url, data) => {
   return requests(Url, {
+    method: "POST",
     data
   })
 };

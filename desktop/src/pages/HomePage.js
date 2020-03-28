@@ -7,7 +7,7 @@ import React from "react";
 import {observer} from 'mobx-react';
 import {Row, Column} from "../component";
 import stores from "../store";
-import {get} from "../util/requests";
+import {get, post} from "../util/requests";
 import '../css/home-page.css';
 import {action} from "mobx";
 
@@ -25,7 +25,7 @@ class HomePage extends React.Component {
       platform: songStore.platformList[0].platform,
       platformIndex: 0,
       keyword: '',
-      downloadPath: ''
+      save_path: ''
     };
     this.renderPlatformList = this.renderPlatformList.bind(this);
     this.onClickPlatformItem = this.onClickPlatformItem.bind(this);
@@ -34,6 +34,7 @@ class HomePage extends React.Component {
     this.onClickSearchBtn = this.onClickSearchBtn.bind(this);
     this.onClickDirSelBtn = this.onClickDirSelBtn.bind(this);
     this.getMusicData = this.getMusicData.bind(this);
+    this.onClickDownloadBtn = this.onClickDownloadBtn.bind(this);
   }
 
   render() {
@@ -132,11 +133,13 @@ class HomePage extends React.Component {
                 }}
               >全选</p>
               <p>下载位置</p>
-              <input type = 'text' readOnly = 'readOnly' value = {this.state.downloadPath}/>
+              <input type = 'text' readOnly = 'readOnly' value = {this.state.save_path}/>
               <img
                 onClick = {this.onClickDirSelBtn}
                 src = {require('../assets/icon/file.svg')} alt = '' />
-              <img src = {require('../assets/icon/download.svg')} alt = '' />
+              <img
+                onClick = {this.onClickDownloadBtn}
+                src = {require('../assets/icon/download.svg')} alt = '' />
             </Row>
             <div
               className = 'music-item-content'
@@ -147,6 +150,34 @@ class HomePage extends React.Component {
         </Row>
       </Column>
     )
+  }
+
+  /**
+   * 点击下载按钮
+   */
+  onClickDownloadBtn() {
+    const {save_path,platform} = this.state;
+    let song_id_list = [];
+    songStore.resultList.forEach(item => {
+      if(item.platform === platform) {
+        item.songList.forEach(_item => {
+          if(_item.selected) {
+            song_id_list.push(_item.id);
+          }
+        });
+      }
+    });
+    save_path.split("\\").join("\\\\");
+    post('/api/download', {
+      platform,
+      song_id_list,
+      save_path
+    })
+      .then((resp) => {
+        if(resp.code === 200) {
+          console.log("下载成功")
+        }
+      })
   }
 
   /**
@@ -185,7 +216,7 @@ class HomePage extends React.Component {
       properties: ['openDirectory']
     });
     this.setState({
-      downloadPath: result.filePaths.join('')
+      save_path: result.filePaths[0]
     })
   }
 
@@ -302,7 +333,7 @@ class HomePage extends React.Component {
                 src = {_item.selected ?require('../assets/icon/radio.selected.svg'): require('../assets/icon/radio.svg')}
                 alt = '' />
               <p>{_item.name}</p>
-              <p>{typeof _item.singers === "string" ? _item.singers: _item.singers.join(' ')}</p>
+              <p>{_item.singers.join(' ')}</p>
               <p>{_item.album}</p>
             </Row>
           )
