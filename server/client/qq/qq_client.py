@@ -14,7 +14,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from client.basic_client import BaseClient
-from common.model import SearchForm, Song
+from common.model import SearchForm, Song, DownloadHistory
 from common.constant import QQ
 from common.http import download_and_save_file
 
@@ -48,7 +48,7 @@ class QQClient(BaseClient):
         results = []
         for song in res.json()['data']['song']['list']:
             id = song.get('songmid')
-            singers = ','.join([s.get('name') for s in song.get('singer')])
+            singers = [s.get('name') for s in song.get('singer')]
             name = song.get('songname')
             album = song.get('albumname')
             song = Song(id, name, singers, album)
@@ -100,6 +100,8 @@ class QQClient(BaseClient):
                   "songmid": song_id,
                   "needNewCode": 0}
         qualities = [("A000", "ape", 800), ("F000", "flac", 800), ("M800", "mp3", 320), ("C400", "m4a", 128), ("M500", "mp3", 128)]
+
+        success = False
         for quality in qualities:
             file_name = song.file_name(quality[1])
             params['filename'] = '%s%s.%s' % (quality[0], song_id, quality[1])
@@ -111,16 +113,14 @@ class QQClient(BaseClient):
             if vkey:
                 download_url = self.__download_url_format.format('%s%s.%s' % (quality[0], song_id, quality[1]), vkey, guid)
                 try:
-                    res = download_and_save_file(file_name, save_path, download_url, headers=self.__headers)
+                    download_and_save_file(file_name, save_path, download_url, headers=self.__headers)
+                    success = True
+                    break
                 except:
-                    res = False
-            else:
-                res = False
+                    logging.warning('download failed, retry lower quality, %s, id = %s', file_name, song_id)
 
-            if res:
-                break
-            logging.warning('download failed, retry lower quality, %s, id = %s, msg = ', file_name, song_id)
-        if not res:
+        # 所有品质都尝试过
+        if not success:
             fcg_res = requests.get(self.__fcg_url.format(song_id), headers=self.__headers)
             fcg_res_json = fcg_res.json()
             download_url = str(fcg_res_json["req"]["data"]["freeflowsip"][0]) + str(
@@ -128,16 +128,12 @@ class QQClient(BaseClient):
             file_name = song.file_name('m4a')
             try:
                 download_and_save_file(file_name, save_path, download_url, self.__headers)
+                success = True
             except:
-                logging.warning('last download failed %s, id = %s, msg = ', file_name, song_id)
-                return
-        logging.info('download successfully %s in %s', file_name, save_path)
-
-if __name__ == '__main__':
-    client = QQClient()
-    # search_form = SearchForm("一剪梅", QQ)
-    # result = client.search_song(search_form)
-    # client._download_one_song(result[1].id, './song')
-    search_form = SearchForm("819533429", QQ)
-    # client.get_song_list(search_form)
-    client._get_song_info('001F3eum3FtG1a')
+                success = False
+        if success:
+            logging.info('download successfully %s in %s', file_name, save_path)
+        else:
+            logging.warning('download failed %s, id = %s', file_name, song_id)
+        # 记录历史
+        DownloadHistory.add(song, success)
