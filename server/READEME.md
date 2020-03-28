@@ -13,6 +13,8 @@
 
 ## 接口
 
+默认端口：8765
+
 ### GET /api/search
 
 #### 功能
@@ -79,3 +81,46 @@
     "msg": "操作成功"
 }
 ~~~
+
+
+
+### GET /api/history
+
+#### 请求参数
+
+无
+
+#### 响应示例
+
+~~~json
+{
+    "code": 200,
+    "data": [
+        {
+            "song": {
+                "album": "中国梦之声·我们的歌 第12期",
+                "id": null,
+                "name": "心动 (Live)",
+                "singers": [
+                    "那英",
+                    "肖战"
+                ]
+            },
+            "success": false // 是否成功
+        },
+        {
+            "song": {
+                "album": "爱情的尽头",
+                "id": null,
+                "name": "Last Dance",
+                "singers": [
+                    "伍佰 & China Blue"
+                ]
+            },
+            "success": true
+        }
+    ],
+    "msg": "操作成功"
+}
+~~~
+
