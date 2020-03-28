@@ -5,7 +5,6 @@
 @description: 网络工具
 """
 import json
-from flask.json import JSONEncoder as _JSONEncoder
 import os
 import requests
 from contextlib import closing
@@ -13,7 +12,7 @@ from common.common_class import ServerError
 
 
 # 自定义JSON序列化器
-class JSONEncoder(_JSONEncoder):
+class JSONEncoder(json.JSONEncoder):
     def default(self, o):
         return {k: v for k, v in o.__dict__.items() if not k.startswith("__")}
 
