@@ -221,7 +221,7 @@
 }
 
 .music-content .music-menu input {
-    width: 317px;
+    width: 285px;
     height: 24px;
 
     margin-left: 6px;
@@ -243,11 +243,18 @@
     margin-left: 12px;
 }
 
-.music-content .music-menu img:last-child {
+.music-content .music-menu img:nth-child(6) {
     width: 20.5px;
     height: 20.5px;
 
     margin-left: 11.9px;
+}
+
+.music-content .music-menu img:last-child {
+    width: 20.5px;
+    height: 20.5px;
+
+    margin-left: 12px;
 }
 
 .music-item-content {

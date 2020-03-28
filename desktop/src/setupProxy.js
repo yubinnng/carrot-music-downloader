@@ -13,5 +13,9 @@ module.exports = function (app) {
   app.use(createProxyMiddleware('/api/search', {
     target: 'http://localhost:8765',
     changeOrigin: true
+  }));
+  app.use(createProxyMiddleware('/api/history', {
+    target: 'http://localhost:8765',
+    changeOrigin: true
   }))
 };

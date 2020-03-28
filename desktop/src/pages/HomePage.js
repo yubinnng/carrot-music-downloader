@@ -140,6 +140,7 @@ class HomePage extends React.Component {
               <img
                 onClick = {this.onClickDownloadBtn}
                 src = {require('../assets/icon/download.svg')} alt = '' />
+              <img src = {require('../assets/icon/history.svg')} alt = ""/>
             </Row>
             <div
               className = 'music-item-content'
