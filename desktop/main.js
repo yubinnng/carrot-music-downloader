@@ -64,3 +64,27 @@ ipcMain.on("min", (event, args) => {
   args === 200 && mainWindow.minimize();
 
 });
+
+// 服务端进程
+let serverProc;
+
+const createServerProc = () => {
+  let server_dir = 'server/';
+  let serverAppName;
+  switch (process.platform) {
+    case 'win32': serverAppName = 'server.exe';break;
+    case 'darwin': serverAppName = 'server.app';break;
+    case 'linux': serverAppName = 'server';break;
+  }
+  serverProc = require('child_process').execFile(server_dir + serverAppName);
+  console.log('server proc start');
+};
+
+const closeServerProc = () => {
+  serverProc.kill();
+  serverProc = null;
+  console.log('server proc close');
+};
+
+app.on('ready', createServerProc);
+app.on('will-quit', closeServerProc);
