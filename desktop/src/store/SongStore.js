@@ -22,6 +22,9 @@ class SongStore {
   }
 
   @observable
+  allSelected = false;
+
+  @observable
   platformList = [
     {
       id: 1,
@@ -30,7 +33,7 @@ class SongStore {
     },
     {
       id: 2,
-      platform: 'QQMusic',
+      platform: 'QQ',
       value: 'QQ音乐'
     }
   ];
@@ -39,14 +42,16 @@ class SongStore {
   resultList = [];
 
   @action
-  addResultList(platform, data) {
-    this.resultList.forEach(item => {
+  addResultList(platform, keyword, data) {
+    this.resultList.map(item => {
       if(item.platform === platform) {
+        item.keyword = keyword;
         data.map(_item => (
           _item.selected = false
         ));
         item.songList = data;
       }
+      return item;
     })
   }
 
