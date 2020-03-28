@@ -118,9 +118,10 @@ class DownloadHistory:
         """
         查看所有下载记录
         """
-        with open(DownloadHistory._file_path, 'r', encoding='utf-8') as json_file:
-            exist = os.path.exists(DownloadHistory._file_path)
-            if exist:
-                return json.load(json_file)
-            else:
-                return []
+        exist = os.path.exists(DownloadHistory._file_path)
+        if exist:
+            with open(DownloadHistory._file_path, 'r', encoding='utf-8') as json_file:
+                if exist:
+                    return json.load(json_file)
+        else:
+            return []
