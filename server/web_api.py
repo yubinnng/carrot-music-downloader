@@ -7,16 +7,12 @@
 import json
 import logging
 from flask import request, Flask
-from client import NeteaseClient
+from client import client_dict
 from common.http import bind_json, bind_param
 from common.common_class import ServerError
 from common.model import *
 
 app = Flask(__name__)
-
-client_dict = {
-    "netease": NeteaseClient()
-}
 
 
 @app.route('/api/search', endpoint="search")
@@ -24,6 +20,9 @@ client_dict = {
 def search(search_form: SearchForm):
     # 策略模式，获取对应平台的客户端
     client = client_dict.get(search_form.platform)
+    if not client:
+        raise ServerError("没有此平台")
+
     # 若全为数字则判定为歌单
     if search_form.keyword.isdigit():
         result = client.get_song_list(search_form)

@@ -8,7 +8,6 @@ import json
 from flask.json import JSONEncoder as _JSONEncoder
 import os
 import requests
-import logging
 from contextlib import closing
 from common.common_class import ServerError
 

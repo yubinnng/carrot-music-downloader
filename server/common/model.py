@@ -56,9 +56,6 @@ class SearchForm:
 # 歌曲实体类
 class Song(BaseClass):
 
-    # 音乐平台
-    platform: str
-
     # 歌曲ID
     id: str
 
@@ -71,9 +68,11 @@ class Song(BaseClass):
     # 专辑
     album: str
 
-    def __init__(self, platform=None, id=None, name=None, singers=None, album=None) -> None:
-        self.platform = platform
+    def __init__(self, id=None, name=None, singers=None, album=None) -> None:
         self.id = id
         self.name = name
         self.singers = singers
         self.album = album
+
+    def file_name(self, suffix):
+        return '{}--{}--{}.{}'.format(self.name, ','.join(self.singers), self.album, suffix)
