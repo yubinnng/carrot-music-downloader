@@ -25,16 +25,19 @@ class HomePage extends React.Component {
       platform: songStore.platformList[0].platform,
       platformIndex: 0,
       keyword: '',
-      save_path: ''
+      save_path: '',
+      historyList: []
     };
     this.renderPlatformList = this.renderPlatformList.bind(this);
     this.onClickPlatformItem = this.onClickPlatformItem.bind(this);
     this.renderMusicList = this.renderMusicList.bind(this);
     this.handleKeyChange = this.handleKeyChange.bind(this);
     this.onClickSearchBtn = this.onClickSearchBtn.bind(this);
+    this.renderHistoryList = this.renderHistoryList.bind(this);
     this.onClickDirSelBtn = this.onClickDirSelBtn.bind(this);
     this.getMusicData = this.getMusicData.bind(this);
     this.onClickDownloadBtn = this.onClickDownloadBtn.bind(this);
+    this.getHistoryList = this.getHistoryList.bind(this);
   }
 
   render() {
@@ -59,7 +62,7 @@ class HomePage extends React.Component {
           >
             <img
               onClick = {(event) => {this.onClickSearchBtn(event)}}
-              src = {require('../assets/icon/search.svg')} alt = '' />
+              src = {require('../assets/icon/search.svg')} alt = '搜索' />
           </Column>
           <Column
             className = 'no-drag'
@@ -68,7 +71,7 @@ class HomePage extends React.Component {
             <img
               className = 'no-drag'
               src = {require('../assets/icon/min.svg')}
-              alt = ''
+              alt = '最小化'
             />
           </Column>
           <Column
@@ -77,7 +80,7 @@ class HomePage extends React.Component {
           >
             <img
               src = {require('../assets/icon/remove.svg')}
-              alt = ''
+              alt = '关闭'
             />
           </Column>
         </Row>
@@ -136,21 +139,75 @@ class HomePage extends React.Component {
               <input type = 'text' readOnly = 'readOnly' value = {this.state.save_path}/>
               <img
                 onClick = {this.onClickDirSelBtn}
-                src = {require('../assets/icon/file.svg')} alt = '' />
+                src = {require('../assets/icon/file.svg')} title = '选择文件夹' alt = '选择文件夹' />
               <img
                 onClick = {this.onClickDownloadBtn}
-                src = {require('../assets/icon/download.svg')} alt = '' />
-              <img src = {require('../assets/icon/history.svg')} alt = ""/>
+                src = {require('../assets/icon/download.svg')} title = '下载' alt = '下载' />
+              <img
+                onClick = {() => {
+                  this.setState(() => (
+                    {
+                      platformIndex: -1
+
+                    }), () => {
+                    this.getHistoryList();
+                  })
+                }}
+                src = {require('../assets/icon/history.svg')} title = '历史记录' alt = "历史记录"/>
             </Row>
             <div
               className = 'music-item-content'
             >
-              {this.renderMusicList()}
+              {this.state.platformIndex === -1 ? this.renderHistoryList() : this.renderMusicList()}
             </div>
           </Column>
         </Row>
       </Column>
     )
+  }
+
+  /**
+   * 获取下载历史列表
+   */
+  getHistoryList() {
+    get('/api/history')
+      .then((response) => {
+        if(response.code === 200) {
+          this.setState(() => (
+            {
+              historyList: response.data
+            }
+          ))
+        }
+      })
+  }
+
+  /**
+   * 渲染列表
+   */
+  renderHistoryList() {
+    let arr = [];
+    if(this.state.historyList.length > 0) {
+      this.state.historyList.forEach((item,index) => {
+        arr.push(
+          <Row
+            justify = 'flex-start'
+            key = {`history${index}`}
+          >
+            {
+              item.success ?
+                <img src = {require('../assets/icon/download-success.svg')} title = '下载成功' alt = '下载成功' />
+                :
+                <img src = {require('../assets/icon/download-fail.svg')} title = '该歌曲不支持下载' alt = '下载失败' />
+            }
+            <p>{item.song.name}</p>
+            <p>{item.song.singers.join(' ')}</p>
+            <p>{item.song.album}</p>
+          </Row>
+        )
+      })
+    }
+    return arr;
   }
 
   /**
