@@ -69,7 +69,7 @@ ipcMain.on("open-url", (event, url) => {
 let serverProc;
 
 const createServerProc = () => {
-  let server_app = '../../release/server/server';
+  let server_app = '../../server/server';
   let suffix;
   switch (process.platform) {
     case 'win32':
