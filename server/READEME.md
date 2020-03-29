@@ -13,7 +13,8 @@
 
 ## 打包
 ~~~bash
-pyinstaller -D -y --clean -n server main.py
+pip install -r requirements.txt
+pyinstaller -D -y --clean --distpath ../release -n server main.py
 ~~~
 #### 为什么是-D选项而不是-F？
 
