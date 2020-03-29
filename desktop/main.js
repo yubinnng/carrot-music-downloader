@@ -69,20 +69,20 @@ ipcMain.on("open-url", (event, url) => {
 let serverProc;
 
 const createServerProc = () => {
-  let server_dir = 'server/';
-  let serverAppName;
+  let server_app = '../../release/server/server';
+  let suffix;
   switch (process.platform) {
     case 'win32':
-      serverAppName = 'server.exe';
+      suffix = '.exe';
       break;
     case 'darwin':
-      serverAppName = 'server.app';
+      suffix = '.app';
       break;
     case 'linux':
-      serverAppName = 'server';
+      suffix = '';
       break;
   }
-  serverProc = require('child_process').execFile(server_dir + serverAppName);
+  serverProc = require('child_process').execFile(server_app + suffix);
   console.log('server proc start');
 };
 
