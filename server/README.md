@@ -13,7 +13,7 @@
 
 ## 打包
 ~~~bash
-pip install -r requirements.txt
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 pyinstaller -D -y --clean --distpath ../release -n server main.py
 ~~~
 #### 为什么是-D选项而不是-F？
