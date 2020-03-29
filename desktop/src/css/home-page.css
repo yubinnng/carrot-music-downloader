@@ -46,6 +46,8 @@
     height: 22px;
 
     margin-left: 4px;
+
+    cursor: pointer;
 }
 
 .home-page-header div:nth-child(3) img {
@@ -58,6 +60,8 @@
     height: 22px;
 
     margin-left: 11.5px;
+
+    cursor: pointer;
 }
 
 .home-page-header div:nth-child(4) img {
@@ -70,6 +74,7 @@
     height: 22px;
 
     margin-left: 11.5px;
+    cursor: pointer;
 }
 
 .home-page-header div:last-child img {
@@ -94,7 +99,7 @@
 
 .platform-content {
     width: 114px;
-    height: 301px;
+    height: 341px;
 
     overflow: auto;
 }
@@ -136,7 +141,7 @@
 
 .app-msg-content {
     width: 114px;
-    height: 140px;
+    height: 100px;
     background-color: #ffffff;
 
     border-top: 1px solid #D8D8D8;
@@ -159,13 +164,12 @@
 }
 
 .app-msg-content>div {
-    width: 90px;
+    width: 110px;
     height: 50px;
 }
 
 .app-msg-content>div>div {
-    cursor: pointer;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .app-msg-content p {

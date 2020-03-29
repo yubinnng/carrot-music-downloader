@@ -5,7 +5,7 @@
 
 import React from "react";
 import {observer} from 'mobx-react';
-import {Row, Column} from "../component";
+import {Row, Column, Toast} from "../component";
 import stores from "../store";
 import {get, post} from "../util/requests";
 import '../css/home-page.css';
@@ -101,17 +101,17 @@ class HomePage extends React.Component {
                 <p className = 'text'>
                   本软件完全开源仅用于代码学习不得用于商业用途
                 </p>
-                <Row>
-                  <p>联系我</p>
-                  <img src = {require('../assets/icon/chat.svg')} alt = '' />
-                </Row>
-                <Row>
-                  <p>改进建议</p>
-                  <img src = {require('../assets/icon/mail.svg')} alt = '' />
-                </Row>
-                <Row>
+                <Row
+                  onClick = {() => {
+                    ipcRenderer.send('open-url', 'https://github.com/Carrot-Software/carrot-music-downloader');
+                  }}
+                  style={{cursor: "pointer"}}
+                >
                   <p>项目GitHub地址</p>
                   <img src = {require('../assets/icon/share.svg')} alt = '' />
+                </Row>
+                <Row>
+                  <p>您的反馈对我们至关重要</p>
                 </Row>
               </Column>
             </Row>
@@ -214,7 +214,7 @@ class HomePage extends React.Component {
    * 点击下载按钮
    */
   onClickDownloadBtn() {
-    const {save_path,platform} = this.state;
+    const {save_path,platform, platformIndex} = this.state;
     let song_id_list = [];
     songStore.resultList.forEach(item => {
       if(item.platform === platform) {
@@ -226,16 +226,19 @@ class HomePage extends React.Component {
       }
     });
     save_path.split("\\").join("\\\\");
-    post('/api/download', {
-      platform,
-      song_id_list,
-      save_path
-    })
-      .then((resp) => {
-        if(resp.code === 200) {
-          console.log("下载成功")
-        }
+    Toast.info("开始下载");
+    if( !!save_path && !! song_id_list && platformIndex !== -1) {
+      post('/api/download', {
+        platform,
+        song_id_list,
+        save_path
       })
+        .then((resp) => {
+          if(resp.code === 200) {
+            Toast.info("下载成功")
+          }
+        })
+    }
   }
 
   /**
@@ -255,14 +258,16 @@ class HomePage extends React.Component {
    */
   @action
   onClickAllSelected() {
-    songStore.allSelected = !songStore.allSelected;
-    songStore.resultList.forEach(item => {
-      if(item.platform === this.state.platform) {
-        item.songList.map(_item => (
-          _item.selected = songStore.allSelected
-        ))
-      }
-    })
+    if(this.state.platformIndex !== -1) {
+      songStore.allSelected = !songStore.allSelected;
+      songStore.resultList.forEach(item => {
+        if(item.platform === this.state.platform) {
+          item.songList.map(_item => (
+            _item.selected = songStore.allSelected
+          ))
+        }
+      })
+    }
   }
 
   /**
@@ -283,8 +288,12 @@ class HomePage extends React.Component {
    */
   onClickSearchBtn(event) {
     event.stopPropagation();
-    if(this.state.keyword) {
-      this.getMusicData();
+    if(this.state.platformIndex !== -1) {
+      if(this.state.keyword) {
+        this.getMusicData();
+      } else {
+        Toast.info("搜索内容为空")
+      }
     }
   }
 

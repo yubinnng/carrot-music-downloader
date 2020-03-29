@@ -6,6 +6,7 @@
  */
 
 import Axios from "axios";
+import {Toast} from "../component";
 
 /**
  * 公共请求
@@ -45,10 +46,14 @@ const requests = (Url, options) => {
       .then(resp => {
         if(resp.data.code === 200) {
           resolve(resp.data);
+        } else {
+          reject(resp.data);
+          Toast.error(resp.data.msg);
         }
       })
       .catch(err => {
         reject(err);
+        Toast.error("系统繁忙")
       })
   }))
 

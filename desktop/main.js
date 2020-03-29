@@ -4,7 +4,7 @@
  */
 
 // 引入 electron 并创建一个 BrowserWindow
-const {app, BrowserWindow, ipcMain} = require("electron");
+const {app, BrowserWindow, ipcMain, shell} = require("electron");
 const path = require("path");
 
 // 保持 window 对象的全局引用，避免 Javascript 对象被来及回收时，窗口被自动关闭
@@ -26,15 +26,11 @@ function createWindow() {
   // 加载应用 ---- 适用于 react 项目
   mainWindow.loadURL("http://localhost:3000/");
 
-  // 打开开发者工具， 默认不打开
-  mainWindow.webContents.openDevTools();
-
   // 关闭 window 时触发下列事件
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
 
-  mainWindow.maximize();
 
 }
 
@@ -63,6 +59,10 @@ ipcMain.on("remove", (event, args) => {
 ipcMain.on("min", (event, args) => {
   args === 200 && mainWindow.minimize();
 
+});
+
+ipcMain.on("open-url", (event, url) => {
+  shell.openExternal(url).then();
 });
 
 // 服务端进程
