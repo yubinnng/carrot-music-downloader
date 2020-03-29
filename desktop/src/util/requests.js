@@ -14,6 +14,9 @@ import {Toast} from "../component";
  * @param options
  * @returns {Promise<unknown>}
  */
+
+const baseUrl = "http://localhost:8765";
+
 const requests = (Url, options) => {
 
   // 默认头信息
@@ -33,7 +36,7 @@ const requests = (Url, options) => {
   let body = JSON.stringify(data);
 
   // url
-  let url = `${Url}`;
+  let url = `${baseUrl}${Url}`;
 
   return new Promise(((resolve, reject) => {
     Axios({
