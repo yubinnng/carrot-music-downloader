@@ -11,6 +11,7 @@ from flask.json import jsonify
 from common.common_class import BaseClass
 from common.http import JSONEncoder
 from typing import List
+from threading import Lock
 
 
 # 响应结果包装类
@@ -87,6 +88,8 @@ class DownloadHistory:
     # 下载记录文件保存位置
     _file_path = './download_history.json'
 
+    _lock = Lock()
+
     @staticmethod
     def add(song: Song, success: bool):
         """
@@ -96,22 +99,23 @@ class DownloadHistory:
             'song': song,
             'success': success
         }
+        # 加锁，防止读写文件线程不安全
+        with DownloadHistory._lock:
+            # 若文件不存在则创建
+            if not os.path.exists(DownloadHistory._file_path):
+                with open(DownloadHistory._file_path, 'w', encoding='utf-8'):
+                    pass
 
-        # 若文件不存在则创建
-        if not os.path.exists(DownloadHistory._file_path):
-            with open(DownloadHistory._file_path, 'w', encoding='utf-8'):
-                pass
-
-        with open(DownloadHistory._file_path, 'r+', encoding='utf-8') as json_file:
-            empty = os.path.getsize(DownloadHistory._file_path) == 0
-            if empty:
-                history_json = []
-            else:
-                history_json = json.load(json_file)
-            history_json.append(history)
-            # 将文件指针移到开头
-            json_file.seek(0)
-            json.dump(history_json, json_file, ensure_ascii=False, cls=JSONEncoder)
+            with open(DownloadHistory._file_path, 'r+', encoding='utf-8') as json_file:
+                empty = os.path.getsize(DownloadHistory._file_path) == 0
+                if empty:
+                    history_json = []
+                else:
+                    history_json = json.load(json_file)
+                history_json.append(history)
+                # 将文件指针移到开头
+                json_file.seek(0)
+                json.dump(history_json, json_file, ensure_ascii=False, cls=JSONEncoder)
 
     @staticmethod
     def get_all() -> list:
@@ -125,3 +129,9 @@ class DownloadHistory:
                     return json.load(json_file)
         else:
             return []
+
+    @staticmethod
+    def clear_all():
+        exist = os.path.exists(DownloadHistory._file_path)
+        if exist:
+            os.remove(DownloadHistory._file_path)
