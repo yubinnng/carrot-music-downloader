@@ -1,14 +1,14 @@
-#Carrot music download
+# Carrot music download
 
-###主要框架
+### 主要框架
 1. electron @8.1.1
 2. react
 3. axios
 
-###脚手架
+### 脚手架
 create-react-app
 
-####项目启动
+#### 项目启动
 ```
 create-react-app desktop
 cd desktop
@@ -72,14 +72,14 @@ cd desktop
      }
    });
     ```
-####渲染进程中引入electron
+#### 渲染进程中引入electron
 *   index.html
     ```
       <script>
          window.electron = require('electron');
        </script>
     ```
-####项目打包
+#### 项目打包
 electron-builder
 1. desktop下
    ```
