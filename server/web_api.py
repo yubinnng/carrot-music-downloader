@@ -41,9 +41,15 @@ def download():
     return ResultWrapper.success()
 
 
-@app.route('/api/history', endpoint='history')
-def history():
+@app.route('/api/history', endpoint='get_history')
+def get_history():
     return ResultWrapper.success(DownloadHistory.get_all())
+
+
+@app.route('/api/history', methods=['DELETE'], endpoint='clear_history')
+def clear_history():
+    DownloadHistory.clear_all()
+    return ResultWrapper.success()
 
 
 @app.errorhandler(404)
