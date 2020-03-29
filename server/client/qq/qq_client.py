@@ -84,7 +84,7 @@ class QQClient(BaseClient):
         singers = song_page.find('div', attrs={'class': 'data__singer'}).get('title').split(' / ')
         name = song_page.find('h1', attrs={'class': 'data__name_txt'}).get('title')
         album = song_page.find('a', attrs={'class': 'js_album'}).get('title')
-        song = Song(None, name, singers, album)
+        song = Song(song_id, name, singers, album)
         logging.debug('get song info successfully, %s', song)
         return song
 

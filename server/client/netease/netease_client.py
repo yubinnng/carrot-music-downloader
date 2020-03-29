@@ -75,7 +75,7 @@ class NeteaseClient(BaseClient):
         singers = song_page.find('meta', attrs={'property': 'og:music:artist'}).get('content').split('/')
         name = song_page.find('meta', attrs={'property': 'og:title'}).get('content')
         album = song_page.find('meta', attrs={'property': 'og:music:album'}).get('content')
-        song = Song(None, name, singers, album)
+        song = Song(song_id, name, singers, album)
         logging.debug('get song info successfully, %s', song)
         return song
 
