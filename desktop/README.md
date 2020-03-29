@@ -80,4 +80,42 @@ cd desktop
        </script>
     ```
 ####项目打包
-   electron-builder            
+electron-builder
+1. desktop下
+   ```
+   yarn build/npm run build
+   ```
+2. 进入build文件下，新建main.js(复制根目录下)，新建package.json
+   ```
+   {
+     "name": "carrot-music-downloader",
+     "version": "0.1.0",
+     "private": true,
+     "homepage": ".",
+     "main": "main.js",
+     "author": "xue chen",
+     "build": {
+       "directories": {
+         "output": "../../release/desktop"
+       },
+       "win": {
+         "icon": "./favicon.ico"
+       }
+     }
+   }
+   ```
+3. 在build下
+   ```
+   yarn add electron --dev
+   // 或者 npm install electron --save-dev
+   ```
+4. 安装electron-builder(建议全局安装)
+   ```
+    npm install -g electron-builder
+    // 或者 yarn global add electron-builder
+   ```   
+5. 在build下
+    
+    ```
+    electron-builder --win --x64
+    ```
