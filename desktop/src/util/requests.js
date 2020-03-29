@@ -33,7 +33,7 @@ const requests = (Url, options) => {
   let body = JSON.stringify(data);
 
   // url
-  let  url = `${Url}`;
+  let url = `${Url}`;
 
   return new Promise(((resolve, reject) => {
     Axios({
@@ -44,7 +44,7 @@ const requests = (Url, options) => {
       params
     })
       .then(resp => {
-        if(resp.data.code === 200) {
+        if (resp.data.code === 200) {
           resolve(resp.data);
         } else {
           reject(resp.data);

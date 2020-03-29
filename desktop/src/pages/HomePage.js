@@ -11,7 +11,7 @@ import {get, post} from "../util/requests";
 import '../css/home-page.css';
 import {action} from "mobx";
 
-const {ipcRenderer, remote}= window.electron;
+const {ipcRenderer, remote} = window.electron;
 const {dialog} = remote;
 const {songStore} = stores;
 
@@ -43,72 +43,74 @@ class HomePage extends React.Component {
   render() {
     return (
       <Column
-        className = 'wrapper'
+        className='wrapper'
       >
         <Row
-          className = 'drag home-page-header'
-          justify = 'flex-start'
+          className='drag home-page-header'
+          justify='flex-start'
         >
-          <img src = {require('../assets/icon/logo.svg')} alt = '' />
+          <img src={require('../assets/icon/logo.svg')} alt=''/>
           <input
-            className = 'no-drag'
-            type = 'text'
-            placeholder = '输入歌名/歌手名/歌单ID'
-            value = {this.state.keyword}
-            onChange = {this.handleKeyChange}
+            className='no-drag'
+            type='text'
+            placeholder='输入歌名/歌手名/歌单ID'
+            value={this.state.keyword}
+            onChange={this.handleKeyChange}
           />
           <Column
-            className = 'no-drag'
+            className='no-drag'
           >
             <img
-              onClick = {(event) => {this.onClickSearchBtn(event)}}
-              src = {require('../assets/icon/search.svg')} alt = '搜索' />
+              onClick={(event) => {
+                this.onClickSearchBtn(event)
+              }}
+              src={require('../assets/icon/search.svg')} alt='搜索'/>
           </Column>
           <Column
-            className = 'no-drag'
-            onClick = {this.onClickMin}
+            className='no-drag'
+            onClick={this.onClickMin}
           >
             <img
-              className = 'no-drag'
-              src = {require('../assets/icon/min.svg')}
-              alt = '最小化'
+              className='no-drag'
+              src={require('../assets/icon/min.svg')}
+              alt='最小化'
             />
           </Column>
           <Column
-            className = 'no-drag'
-            onClick = {this.onClickRemove}
+            className='no-drag'
+            onClick={this.onClickRemove}
           >
             <img
-              src = {require('../assets/icon/remove.svg')}
-              alt = '关闭'
+              src={require('../assets/icon/remove.svg')}
+              alt='关闭'
             />
           </Column>
         </Row>
         <Row
-          className = 'home-page-content content-border'
-          align = 'flex-start'
+          className='home-page-content content-border'
+          align='flex-start'
         >
-          <Column className = 'platform-content-container'>
-            <div className = 'platform-content'>
+          <Column className='platform-content-container'>
+            <div className='platform-content'>
               {this.renderPlatformList()}
             </div>
             <Row
-              className = 'app-msg-content'
+              className='app-msg-content'
             >
               <Column
-                justify = 'space-around'
+                justify='space-around'
               >
-                <p className = 'text'>
+                <p className='text'>
                   本软件完全开源仅用于代码学习不得用于商业用途
                 </p>
                 <Row
-                  onClick = {() => {
+                  onClick={() => {
                     ipcRenderer.send('open-url', 'https://github.com/Carrot-Software/carrot-music-downloader');
                   }}
                   style={{cursor: "pointer"}}
                 >
                   <p>项目GitHub地址</p>
-                  <img src = {require('../assets/icon/share.svg')} alt = '' />
+                  <img src={require('../assets/icon/share.svg')} alt=''/>
                 </Row>
                 <Row>
                   <p>您的反馈对我们至关重要</p>
@@ -116,35 +118,36 @@ class HomePage extends React.Component {
               </Column>
             </Row>
           </Column>
-          <Column className = 'content-split'/>
+          <Column className='content-split'/>
           <Column
-            className = 'music-content content-border'
-            justify = 'flex-start'
+            className='music-content content-border'
+            justify='flex-start'
           >
             <Row
-              className = 'music-menu content-border'
-              justify = 'flex-start'
+              className='music-menu content-border'
+              justify='flex-start'
             >
               <img
-                onClick = {() => {
+                onClick={() => {
                   this.onClickAllSelected()
                 }}
-                src = {songStore.allSelected ? require('../assets/icon/radio.selected.svg'):require('../assets/icon/radio.svg')} alt = '' />
+                src={songStore.allSelected ? require('../assets/icon/radio.selected.svg') : require('../assets/icon/radio.svg')}
+                alt=''/>
               <p
-                onClick = {() => {
-                this.onClickAllSelected()
+                onClick={() => {
+                  this.onClickAllSelected()
                 }}
               >全选</p>
               <p>下载位置</p>
-              <input type = 'text' readOnly = 'readOnly' value = {this.state.save_path}/>
+              <input type='text' readOnly='readOnly' value={this.state.save_path}/>
               <img
-                onClick = {this.onClickDirSelBtn}
-                src = {require('../assets/icon/file.svg')} title = '选择文件夹' alt = '选择文件夹' />
+                onClick={this.onClickDirSelBtn}
+                src={require('../assets/icon/file.svg')} title='选择文件夹' alt='选择文件夹'/>
               <img
-                onClick = {this.onClickDownloadBtn}
-                src = {require('../assets/icon/download.svg')} title = '下载' alt = '下载' />
+                onClick={this.onClickDownloadBtn}
+                src={require('../assets/icon/download.svg')} title='下载' alt='下载'/>
               <img
-                onClick = {() => {
+                onClick={() => {
                   this.setState(() => (
                     {
                       platformIndex: -1
@@ -153,10 +156,10 @@ class HomePage extends React.Component {
                     this.getHistoryList();
                   })
                 }}
-                src = {require('../assets/icon/history.svg')} title = '历史记录' alt = "历史记录"/>
+                src={require('../assets/icon/history.svg')} title='历史记录' alt="历史记录"/>
             </Row>
             <div
-              className = 'music-item-content'
+              className='music-item-content'
             >
               {this.state.platformIndex === -1 ? this.renderHistoryList() : this.renderMusicList()}
             </div>
@@ -172,7 +175,7 @@ class HomePage extends React.Component {
   getHistoryList() {
     get('/api/history')
       .then((response) => {
-        if(response.code === 200) {
+        if (response.code === 200) {
           this.setState(() => (
             {
               historyList: response.data
@@ -187,18 +190,18 @@ class HomePage extends React.Component {
    */
   renderHistoryList() {
     let arr = [];
-    if(this.state.historyList.length > 0) {
-      this.state.historyList.forEach((item,index) => {
+    if (this.state.historyList.length > 0) {
+      this.state.historyList.forEach((item, index) => {
         arr.push(
           <Row
-            justify = 'flex-start'
-            key = {`history${index}`}
+            justify='flex-start'
+            key={`history${index}`}
           >
             {
               item.success ?
-                <img src = {require('../assets/icon/download-success.svg')} title = '下载成功' alt = '下载成功' />
+                <img src={require('../assets/icon/download-success.svg')} title='下载成功' alt='下载成功'/>
                 :
-                <img src = {require('../assets/icon/download-fail.svg')} title = '该歌曲不支持下载' alt = '下载失败' />
+                <img src={require('../assets/icon/download-fail.svg')} title='该歌曲不支持下载' alt='下载失败'/>
             }
             <p>{item.song.name}</p>
             <p>{item.song.singers.join(' ')}</p>
@@ -214,12 +217,12 @@ class HomePage extends React.Component {
    * 点击下载按钮
    */
   onClickDownloadBtn() {
-    const {save_path,platform, platformIndex} = this.state;
+    const {save_path, platform, platformIndex} = this.state;
     let song_id_list = [];
     songStore.resultList.forEach(item => {
-      if(item.platform === platform) {
+      if (item.platform === platform) {
         item.songList.forEach(_item => {
-          if(_item.selected) {
+          if (_item.selected) {
             song_id_list.push(_item.id);
           }
         });
@@ -227,14 +230,14 @@ class HomePage extends React.Component {
     });
     save_path.split("\\").join("\\\\");
     Toast.info("开始下载");
-    if( !!save_path && !! song_id_list && platformIndex !== -1) {
+    if (!!save_path && !!song_id_list && platformIndex !== -1) {
       post('/api/download', {
         platform,
         song_id_list,
         save_path
       })
         .then((resp) => {
-          if(resp.code === 200) {
+          if (resp.code === 200) {
             Toast.info("下载成功")
           }
         })
@@ -247,7 +250,7 @@ class HomePage extends React.Component {
   @action
   changeAllSelected() {
     songStore.resultList.forEach(item => {
-      if(item.platform === this.state.platform) {
+      if (item.platform === this.state.platform) {
         songStore.allSelected = item.songList.every(_item => _item.selected === true);
       }
     })
@@ -258,10 +261,10 @@ class HomePage extends React.Component {
    */
   @action
   onClickAllSelected() {
-    if(this.state.platformIndex !== -1) {
+    if (this.state.platformIndex !== -1) {
       songStore.allSelected = !songStore.allSelected;
       songStore.resultList.forEach(item => {
-        if(item.platform === this.state.platform) {
+        if (item.platform === this.state.platform) {
           item.songList.map(_item => (
             _item.selected = songStore.allSelected
           ))
@@ -288,8 +291,8 @@ class HomePage extends React.Component {
    */
   onClickSearchBtn(event) {
     event.stopPropagation();
-    if(this.state.platformIndex !== -1) {
-      if(this.state.keyword) {
+    if (this.state.platformIndex !== -1) {
+      if (this.state.keyword) {
         this.getMusicData();
       } else {
         Toast.info("搜索内容为空")
@@ -307,12 +310,13 @@ class HomePage extends React.Component {
       keyword,
     })
       .then(resp => {
-        if(resp.code === 200) {
+        if (resp.code === 200) {
           songStore.addResultList(platform, keyword, resp.data);
           last_keyword = keyword;
         }
       })
   }
+
   /**
    * 处理keyword改变
    * @param event
@@ -338,19 +342,19 @@ class HomePage extends React.Component {
       songStore.allSelected = false;
       let isFull = false;
       songStore.resultList.forEach(item => {
-        if(item.platform === platform) {
-          if(item.songList.length > 0) {
+        if (item.platform === platform) {
+          if (item.songList.length > 0) {
             item.songList.map(_item => (
               _item.selected = false
             ))
           }
-          if(item.keyword !== last_keyword || item.songList.length === 0) {
+          if (item.keyword !== last_keyword || item.songList.length === 0) {
             item.songList = [];
             isFull = true;
           }
         }
       });
-      if(isFull) {
+      if (isFull) {
         this.getMusicData();
       }
 
@@ -366,11 +370,11 @@ class HomePage extends React.Component {
     songStore.platformList.forEach((item, index) => {
       arr.push(
         <Row
-          key = {item.id}
+          key={item.id}
           onClick={(event) => {
             this.onClickPlatformItem(event, item.platform, index);
           }}
-          className = {`platform-item content-border ${this.state.platformIndex === index ? 'platform-active':''}`}
+          className={`platform-item content-border ${this.state.platformIndex === index ? 'platform-active' : ''}`}
         >
           <p>{item.value}</p>
         </Row>
@@ -386,19 +390,19 @@ class HomePage extends React.Component {
   renderMusicList() {
     let arr = [];
     songStore.resultList.forEach(item => {
-      if(item.platform === this.state.platform) {
+      if (item.platform === this.state.platform) {
         item.songList.forEach(_item => {
           arr.push(
             <Row
-              justify = 'flex-start'
-              key = {_item.id}
+              justify='flex-start'
+              key={_item.id}
             >
               <img
-                onClick = {() => {
+                onClick={() => {
                   this.onClickMusicItem(_item)
                 }}
-                src = {_item.selected ?require('../assets/icon/radio.selected.svg'): require('../assets/icon/radio.svg')}
-                alt = '' />
+                src={_item.selected ? require('../assets/icon/radio.selected.svg') : require('../assets/icon/radio.svg')}
+                alt=''/>
               <p>{_item.name}</p>
               <p>{_item.singers.join(' ')}</p>
               <p>{_item.album}</p>

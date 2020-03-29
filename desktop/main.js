@@ -40,14 +40,14 @@ app.on("ready", createWindow);
 // 所有窗口关闭时退出应用
 app.on("window-all-closed", () => {
   // macOS 中除非用户按下 ‘cmd + Q’ 显示退出，否则应用于菜单栏始终处于活动状态
-  if(process.platform !== 'darwin') {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
 app.on("activate", () => {
   // macOS 中点击 Dock 图标时没有已打开的其余应用窗口时，则通常在应用中重建一个窗口
-  if(mainWindow === null) {
+  if (mainWindow === null) {
     createWindow();
   }
 });
@@ -72,9 +72,15 @@ const createServerProc = () => {
   let server_dir = 'server/';
   let serverAppName;
   switch (process.platform) {
-    case 'win32': serverAppName = 'server.exe';break;
-    case 'darwin': serverAppName = 'server.app';break;
-    case 'linux': serverAppName = 'server';break;
+    case 'win32':
+      serverAppName = 'server.exe';
+      break;
+    case 'darwin':
+      serverAppName = 'server.app';
+      break;
+    case 'linux':
+      serverAppName = 'server';
+      break;
   }
   serverProc = require('child_process').execFile(server_dir + serverAppName);
   console.log('server proc start');

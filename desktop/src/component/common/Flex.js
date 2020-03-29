@@ -16,9 +16,9 @@ function Row({flex, className, style, align = 'center', justify = 'center', chil
         justifyContent: justify,
         ...style
       }}
-      className = {className}
-      onMouseEnter = {onMouseEnter}
-      onMouseLeave = {onMouseLeave}
+      className={className}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       onClick={onClick}
     >
       {children}
@@ -38,9 +38,9 @@ function Column({flex, className, style, align = 'center', justify = 'center', c
         justifyContent: justify,
         ...style
       }}
-      className = {className}
-      onMouseEnter = {onMouseEnter}
-      onMouseLeave = {onMouseLeave}
+      className={className}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       onClick={onClick}
     >
       {children}

@@ -11,7 +11,7 @@ import './toast.css'
 function createNotification() {
   const div = document.createElement('div');
   document.body.appendChild(div)
-  const notification = ReactDOM.render(<Toast />, div);
+  const notification = ReactDOM.render(<Toast/>, div);
   return {
     addNotice(notice) {
       return notification.addNotice(notice)
@@ -26,7 +26,7 @@ function createNotification() {
 let notification;
 const notice = (type, content, duration = 2000, onClose) => {
   if (!notification) notification = createNotification();
-  return notification.addNotice({ type, content, duration, onClose })
+  return notification.addNotice({type, content, duration, onClose})
 };
 
 export default {
@@ -36,7 +36,7 @@ export default {
   success(content = '操作成功', duration, onClose) {
     return notice('success', content, duration, onClose)
   },
-  error(content, duration , onClose) {
+  error(content, duration, onClose) {
     return notice('error', content, duration, onClose)
   },
   loading(content = '加载中...', duration = 0, onClose) {

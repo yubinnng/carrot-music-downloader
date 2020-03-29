@@ -44,7 +44,7 @@ class SongStore {
   @action
   addResultList(platform, keyword, data) {
     this.resultList.map(item => {
-      if(item.platform === platform) {
+      if (item.platform === platform) {
         item.keyword = keyword;
         data.map(_item => (
           _item.selected = false
