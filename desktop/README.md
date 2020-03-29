@@ -104,6 +104,16 @@ electron-builder
      }
    }
    ```
+   ```
+   // main.js
+    const url = require("url");
+   ....
+     mainWindow.loadURL(url.format({
+       pathname: path.join(__dirname, './index.html'),
+       protocol: 'file:',
+       slashes: true
+     }));
+   ```
 3. 在build下
    ```
    yarn add electron --dev
