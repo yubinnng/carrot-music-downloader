@@ -8,10 +8,11 @@
 ### 脚手架
 create-react-app
 
-#### 项目启动
+#### 新建项目
 ```
 create-react-app desktop
 cd desktop
+yarn add electron
 ```
 1. 修改package.json
     ```
