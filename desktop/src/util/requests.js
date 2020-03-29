@@ -6,6 +6,7 @@
  */
 
 import Axios from "axios";
+import {Toast} from "../component";
 
 /**
  * 公共请求
@@ -32,7 +33,7 @@ const requests = (Url, options) => {
   let body = JSON.stringify(data);
 
   // url
-  let  url = `${Url}`;
+  let url = `${Url}`;
 
   return new Promise(((resolve, reject) => {
     Axios({
@@ -43,12 +44,16 @@ const requests = (Url, options) => {
       params
     })
       .then(resp => {
-        if(resp.data.code === 200) {
+        if (resp.data.code === 200) {
           resolve(resp.data);
+        } else {
+          reject(resp.data);
+          Toast.error(resp.data.msg);
         }
       })
       .catch(err => {
         reject(err);
+        Toast.error("系统繁忙")
       })
   }))
 

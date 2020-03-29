@@ -7,7 +7,7 @@ import HomePage from './pages/HomePage';
 function App() {
   return (
     <Provider {...stores}>
-      <HomePage />
+      <HomePage/>
     </Provider>
   );
 }
