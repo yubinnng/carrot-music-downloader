@@ -99,6 +99,10 @@ pyinstaller -D -y --clean --distpath ../release -n server main.py
 
 ### GET /api/history
 
+#### 功能
+
+获取所有下载历史
+
 #### 请求参数
 
 无
@@ -133,6 +137,26 @@ pyinstaller -D -y --clean --distpath ../release -n server main.py
             "success": true
         }
     ],
+    "msg": "操作成功"
+}
+~~~
+
+### DELETE /api/history
+
+#### 功能
+
+清空下载历史
+
+#### 请求参数
+
+无
+
+#### 响应示例
+
+~~~json
+{
+    "code": 200,
+    "data": null,
     "msg": "操作成功"
 }
 ~~~
