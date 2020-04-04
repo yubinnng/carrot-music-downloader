@@ -247,7 +247,7 @@ class HomePage extends React.Component {
       }
     });
     save_path.split("\\").join("\\\\");
-    if(platformIndex == -1) {
+    if(platformIndex === -1) {
       Toast.info("请选择平台");
       return;
     }
