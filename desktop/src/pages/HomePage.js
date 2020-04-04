@@ -38,6 +38,7 @@ class HomePage extends React.Component {
     this.getMusicData = this.getMusicData.bind(this);
     this.onClickDownloadBtn = this.onClickDownloadBtn.bind(this);
     this.getHistoryList = this.getHistoryList.bind(this);
+    this._onKeyUp = this._onKeyUp.bind(this);
   }
 
   render() {
@@ -56,6 +57,7 @@ class HomePage extends React.Component {
             placeholder='输入歌名/歌手名/歌单ID'
             value={this.state.keyword}
             onChange={this.handleKeyChange}
+            onKeyUp={this._onKeyUp}
           />
           <Column
             className='no-drag'
@@ -139,7 +141,14 @@ class HomePage extends React.Component {
                 }}
               >全选</p>
               <p>下载位置</p>
-              <input type='text' readOnly='readOnly' value={this.state.save_path}/>
+              <input
+                type='text'
+                onChange={(event) => {
+                  this.setState({
+                    save_path: event.target.value
+                  })
+                }}
+                value={this.state.save_path}/>
               <img
                 onClick={this.onClickDirSelBtn}
                 src={require('../assets/icon/file.svg')} title='选择文件夹' alt='选择文件夹'/>
@@ -167,6 +176,15 @@ class HomePage extends React.Component {
         </Row>
       </Column>
     )
+  }
+
+  /**
+   * 监听回车事件
+   */
+  _onKeyUp(event) {
+    if(event.keyCode === 13) {
+      this.onClickSearchBtn();
+    }
   }
 
   /**
@@ -229,8 +247,19 @@ class HomePage extends React.Component {
       }
     });
     save_path.split("\\").join("\\\\");
-    Toast.info("开始下载");
-    if (!!save_path && !!song_id_list && platformIndex !== -1) {
+    if(platformIndex == -1) {
+      Toast.info("请选择平台");
+      return;
+    }
+    if(song_id_list.length === 0) {
+      Toast.info("请选择歌曲");
+      return;
+    }
+    if(!save_path) {
+      Toast.info("下载位置为空");
+      return;
+    }
+    if (!!save_path && song_id_list.length > 0 && platformIndex !== -1) {
       post('/api/download', {
         platform,
         song_id_list,
@@ -290,7 +319,7 @@ class HomePage extends React.Component {
    * 搜索
    */
   onClickSearchBtn(event) {
-    event.stopPropagation();
+    !!event && event.stopPropagation();
     if (this.state.platformIndex !== -1) {
       if (this.state.keyword) {
         this.getMusicData();
