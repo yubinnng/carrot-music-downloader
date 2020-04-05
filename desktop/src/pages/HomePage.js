@@ -13,7 +13,7 @@ import {action} from "mobx";
 
 const {ipcRenderer, remote} = window.electron;
 const {dialog} = remote;
-const {songStore} = stores;
+const {songStore, localStore} = stores;
 
 let last_keyword = '';
 
@@ -25,7 +25,7 @@ class HomePage extends React.Component {
       platform: songStore.platformList[0].platform,
       platformIndex: 0,
       keyword: '',
-      save_path: '',
+      save_path: localStore.get('path', ''),
       historyList: []
     };
     this.renderPlatformList = this.renderPlatformList.bind(this);
@@ -310,6 +310,10 @@ class HomePage extends React.Component {
       title: '选择下载位置',
       properties: ['openDirectory']
     });
+
+    // 保存到本地
+    localStore.set('path', result.filePaths[0]);
+
     this.setState({
       save_path: result.filePaths[0]
     })

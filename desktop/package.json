@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "customize-cra": "^0.9.1",
     "electron": "^8.1.1",
+    "electron-store": "^5.1.1",
     "http-proxy-middleware": "^1.0.3",
     "mobx": "^5.15.4",
     "mobx-react": "^6.1.8",
