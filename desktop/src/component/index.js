@@ -5,8 +5,10 @@
 
 import {Row, Column} from "./common/Flex";
 import Toast from './toast';
+import Header from "./common/Header";
 
 export {
   Row, Column,
-  Toast
+  Toast,
+  Header
 }

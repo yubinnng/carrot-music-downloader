@@ -1,95 +1,7 @@
-.home-page-header {
-    width: 100%;
-    height: 59px;
-
-    background-color: #5A5A5A;
-
-    border: 1px solid #707070;
-}
-
-
-.home-page-header p {
-    width: 226px;
-    height: 14px;
-
-    font-size: 10px;
-    font-family: Regular;
-
-    color: #ffffff;
-}
-
-.home-page-header input {
-    width: 174px;
-    height: 28px;
-
-    margin-left: 219.8px;
-
-    border: 1px solid #707070;
-    border-radius: 10px;
-
-    font-size: 12px;
-    font-family: Regular;
-
-    padding-left: 10px;
-}
-
-
-.home-page-header img:first-child {
-    width: 114px;
-    height: 40px;
-
-    margin-left: 16px;
-}
-
-.home-page-header div:nth-child(3) {
-    width: 22px;
-    height: 22px;
-
-    margin-left: 4px;
-
-    cursor: pointer;
-}
-
-.home-page-header div:nth-child(3) img {
-    width: 22px;
-    height: 22px;
-}
-
-.home-page-header div:nth-child(4) {
-    width: 22px;
-    height: 22px;
-
-    margin-left: 11.5px;
-
-    cursor: pointer;
-}
-
-.home-page-header div:nth-child(4) img {
-    width: 19.5px;
-    height: 2.5px;
-}
-
-.home-page-header div:last-child {
-    width: 22px;
-    height: 22px;
-
-    margin-left: 11.5px;
-    cursor: pointer;
-}
-
-.home-page-header div:last-child img {
-    width: 17px;
-    height: 17px;
-}
-
 .home-page-content {
     width: 100%;
 
     overflow: hidden;
-}
-
-.content-border {
-    border: .5px solid #D8D8D8;
 }
 
 .platform-content-container {
@@ -203,7 +115,7 @@
 
 .music-content .music-menu {
     width: 534px;
-    height: 48px;
+    height: 51px;
 
     border-left: 0;
     border-top: 0;
@@ -275,9 +187,41 @@
     border-bottom: 1px solid #D8D8D8;
 }
 
-.music-item-content div p {
-    font-size: 10px;
+.music-item-content-header {
+    width: 100%;
+    height: 25px;
+}
+
+.music-item-content-header p {
+    height: 25px;
+    line-height: 25px;
+
+    font-size: 13px;
     font-family: Semibold;
+    font-weight: bolder;
+
+    color: #5A5A5A;
+
+    padding-left: 5.8px;
+    border-left: 1px solid #AEABAB;
+}
+
+.music-item-content-header p:first-child {
+    margin-left: 33.3px;
+}
+
+.music-item-content-header p:nth-child(2) {
+    margin-left: 160.3px;
+}
+
+.music-item-content-header p:last-child {
+    margin-left: 42.3px;
+}
+
+.music-item-content div p {
+    font-size: 13px;
+    font-family: Semibold;
+    font-weight: bolder;
 
     color: #5A5A5A;
 

@@ -5,7 +5,7 @@
 
 import React from "react";
 import {observer} from 'mobx-react';
-import {Row, Column, Toast} from "../component";
+import {Row, Column, Toast, Header} from "../component";
 import stores from "../store";
 import {get, post} from "../util/requests";
 import '../css/home-page.css';
@@ -13,9 +13,10 @@ import {action} from "mobx";
 
 const {ipcRenderer, remote} = window.electron;
 const {dialog} = remote;
-const {songStore, localStore} = stores;
+const {songStore, storage} = stores;
 
 let last_keyword = '';
+const PATH_KEY = "path";
 
 @observer
 class HomePage extends React.Component {
@@ -25,7 +26,7 @@ class HomePage extends React.Component {
       platform: songStore.platformList[0].platform,
       platformIndex: 0,
       keyword: '',
-      save_path: localStore.get('path', ''),
+      save_path: storage.get(PATH_KEY) || "",
       historyList: []
     };
     this.renderPlatformList = this.renderPlatformList.bind(this);
@@ -33,11 +34,9 @@ class HomePage extends React.Component {
     this.renderMusicList = this.renderMusicList.bind(this);
     this.handleKeyChange = this.handleKeyChange.bind(this);
     this.onClickSearchBtn = this.onClickSearchBtn.bind(this);
-    this.renderHistoryList = this.renderHistoryList.bind(this);
     this.onClickDirSelBtn = this.onClickDirSelBtn.bind(this);
     this.getMusicData = this.getMusicData.bind(this);
     this.onClickDownloadBtn = this.onClickDownloadBtn.bind(this);
-    this.getHistoryList = this.getHistoryList.bind(this);
     this._onKeyUp = this._onKeyUp.bind(this);
   }
 
@@ -46,48 +45,12 @@ class HomePage extends React.Component {
       <Column
         className='wrapper'
       >
-        <Row
-          className='drag home-page-header'
-          justify='flex-start'
-        >
-          <img src={require('../assets/icon/logo.svg')} alt=''/>
-          <input
-            className='no-drag'
-            type='text'
-            placeholder='输入歌名/歌手名/歌单ID'
-            value={this.state.keyword}
-            onChange={this.handleKeyChange}
-            onKeyUp={this._onKeyUp}
-          />
-          <Column
-            className='no-drag'
-          >
-            <img
-              onClick={(event) => {
-                this.onClickSearchBtn(event)
-              }}
-              src={require('../assets/icon/search.svg')} alt='搜索'/>
-          </Column>
-          <Column
-            className='no-drag'
-            onClick={this.onClickMin}
-          >
-            <img
-              className='no-drag'
-              src={require('../assets/icon/min.svg')}
-              alt='最小化'
-            />
-          </Column>
-          <Column
-            className='no-drag'
-            onClick={this.onClickRemove}
-          >
-            <img
-              src={require('../assets/icon/remove.svg')}
-              alt='关闭'
-            />
-          </Column>
-        </Row>
+        <Header
+          keyword = {this.state.keyword}
+          handleKeyChange = {this.handleKeyChange}
+          _onKeyUp = {this._onKeyUp}
+          onClickSearchBtn = {this.onClickSearchBtn}
+        />
         <Row
           className='home-page-content content-border'
           align='flex-start'
@@ -157,20 +120,22 @@ class HomePage extends React.Component {
                 src={require('../assets/icon/download.svg')} title='下载' alt='下载'/>
               <img
                 onClick={() => {
-                  this.setState(() => (
-                    {
-                      platformIndex: -1
-
-                    }), () => {
-                    this.getHistoryList();
-                  })
+                  this.props.changeHref("./history")
                 }}
                 src={require('../assets/icon/history.svg')} title='历史记录' alt="历史记录"/>
+            </Row>
+            <Row
+              className = 'content-border music-item-content-header'
+              justify = "flex-start"
+            >
+              <p>音乐标题</p>
+              <p>歌手</p>
+              <p>专辑</p>
             </Row>
             <div
               className='music-item-content'
             >
-              {this.state.platformIndex === -1 ? this.renderHistoryList() : this.renderMusicList()}
+              {this.renderMusicList()}
             </div>
           </Column>
         </Row>
@@ -188,54 +153,10 @@ class HomePage extends React.Component {
   }
 
   /**
-   * 获取下载历史列表
-   */
-  getHistoryList() {
-    get('/api/history')
-      .then((response) => {
-        if (response.code === 200) {
-          this.setState(() => (
-            {
-              historyList: response.data
-            }
-          ))
-        }
-      })
-  }
-
-  /**
-   * 渲染列表
-   */
-  renderHistoryList() {
-    let arr = [];
-    if (this.state.historyList.length > 0) {
-      this.state.historyList.forEach((item, index) => {
-        arr.push(
-          <Row
-            justify='flex-start'
-            key={`history${index}`}
-          >
-            {
-              item.success ?
-                <img src={require('../assets/icon/download-success.svg')} title='下载成功' alt='下载成功'/>
-                :
-                <img src={require('../assets/icon/download-fail.svg')} title='该歌曲不支持下载' alt='下载失败'/>
-            }
-            <p>{item.song.name}</p>
-            <p>{item.song.singers.join(' ')}</p>
-            <p>{item.song.album}</p>
-          </Row>
-        )
-      })
-    }
-    return arr;
-  }
-
-  /**
    * 点击下载按钮
    */
   onClickDownloadBtn() {
-    const {save_path, platform, platformIndex} = this.state;
+    const {save_path, platform} = this.state;
     let song_id_list = [];
     songStore.resultList.forEach(item => {
       if (item.platform === platform) {
@@ -247,10 +168,6 @@ class HomePage extends React.Component {
       }
     });
     save_path.split("\\").join("\\\\");
-    if(platformIndex === -1) {
-      Toast.info("请选择平台");
-      return;
-    }
     if(song_id_list.length === 0) {
       Toast.info("请选择歌曲");
       return;
@@ -259,7 +176,7 @@ class HomePage extends React.Component {
       Toast.info("下载位置为空");
       return;
     }
-    if (!!save_path && song_id_list.length > 0 && platformIndex !== -1) {
+    if (!!save_path && song_id_list.length > 0) {
       post('/api/download', {
         platform,
         song_id_list,
@@ -290,16 +207,14 @@ class HomePage extends React.Component {
    */
   @action
   onClickAllSelected() {
-    if (this.state.platformIndex !== -1) {
-      songStore.allSelected = !songStore.allSelected;
-      songStore.resultList.forEach(item => {
-        if (item.platform === this.state.platform) {
-          item.songList.map(_item => (
-            _item.selected = songStore.allSelected
-          ))
-        }
-      })
-    }
+    songStore.allSelected = !songStore.allSelected;
+    songStore.resultList.forEach(item => {
+      if (item.platform === this.state.platform) {
+        item.songList.map(_item => (
+          _item.selected = songStore.allSelected
+        ))
+      }
+    })
   }
 
   /**
@@ -311,12 +226,16 @@ class HomePage extends React.Component {
       properties: ['openDirectory']
     });
 
-    // 保存到本地
-    localStore.set('path', result.filePaths[0]);
+    if(result) {
+      // 保存文件
+      storage.set(PATH_KEY, result.filePaths[0]);
+      this.setState({
+        save_path: result.filePaths[0]
+      });
+    }
 
-    this.setState({
-      save_path: result.filePaths[0]
-    })
+
+
   }
 
   /**
@@ -324,12 +243,10 @@ class HomePage extends React.Component {
    */
   onClickSearchBtn(event) {
     !!event && event.stopPropagation();
-    if (this.state.platformIndex !== -1) {
-      if (this.state.keyword) {
-        this.getMusicData();
-      } else {
-        Toast.info("搜索内容为空")
-      }
+    if (this.state.keyword) {
+      this.getMusicData();
+    } else {
+      Toast.info("搜索内容为空")
     }
   }
 
@@ -455,24 +372,6 @@ class HomePage extends React.Component {
   onClickMusicItem(item) {
     item.selected = !item.selected;
     this.changeAllSelected();
-  }
-
-  /**
-   * 点击关闭
-   * @param event
-   */
-  onClickRemove(event) {
-    event.stopPropagation();
-    ipcRenderer.send('remove', 200);
-  }
-
-  /**
-   * 点击最小化
-   * @param event
-   */
-  onClickMin(event) {
-    event.stopPropagation();
-    ipcRenderer.send('min', 200);
   }
 
 }

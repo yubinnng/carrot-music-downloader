@@ -15,7 +15,7 @@ import {Toast} from "../component";
  * @returns {Promise<unknown>}
  */
 
-const baseUrl = "http://localhost:8765";
+// const baseUrl = "http://localhost:8765";
 
 const requests = (Url, options) => {
 
@@ -36,7 +36,7 @@ const requests = (Url, options) => {
   let body = JSON.stringify(data);
 
   // url
-  let url = `${baseUrl}${Url}`;
+  let url = `${''}${Url}`;
 
   return new Promise(((resolve, reject) => {
     Axios({
@@ -87,4 +87,17 @@ const post = (Url, data) => {
   })
 };
 
-export {get, post}
+/**
+ * delete
+ * @param Url
+ * @param data
+ * @returns {Promise<unknown>}
+ */
+const del = (Url, data) => {
+  return requests(Url, {
+    method: "DELETE",
+    data
+  })
+};
+
+export {get, post, del}

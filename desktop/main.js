@@ -5,7 +5,6 @@
 
 // 引入 electron 并创建一个 BrowserWindow
 const {app, BrowserWindow, ipcMain, shell} = require("electron");
-const path = require("path");
 
 // 保持 window 对象的全局引用，避免 Javascript 对象被来及回收时，窗口被自动关闭
 let mainWindow;
@@ -29,6 +28,10 @@ function createWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
+
+
+  mainWindow.maximize();
+  mainWindow.webContents.openDevTools();
 
 
 }
@@ -68,7 +71,7 @@ ipcMain.on("open-url", (event, url) => {
 let serverProc;
 
 const createServerProc = () => {
-  let server_app = '../../server/server';
+  let server_app = '../release/server/server';
   let suffix;
   switch (process.platform) {
     case 'win32':
