@@ -27,7 +27,6 @@ class HomePage extends React.Component {
       platformIndex: 0,
       keyword: '',
       save_path: storage.get(PATH_KEY) || "",
-      historyList: []
     };
     this.renderPlatformList = this.renderPlatformList.bind(this);
     this.onClickPlatformItem = this.onClickPlatformItem.bind(this);
@@ -132,8 +131,9 @@ class HomePage extends React.Component {
               <p>歌手</p>
               <p>专辑</p>
             </Row>
+
             <div
-              className='music-item-content'
+              className = 'music-item-content'
             >
               {this.renderMusicList()}
             </div>
@@ -225,8 +225,7 @@ class HomePage extends React.Component {
       title: '选择下载位置',
       properties: ['openDirectory']
     });
-
-    if(result) {
+    if(result.filePaths.length > 0) {
       // 保存文件
       storage.set(PATH_KEY, result.filePaths[0]);
       this.setState({
@@ -286,7 +285,7 @@ class HomePage extends React.Component {
     this.setState(() => (
       {
         platform,
-        platformIndex,
+        platformIndex
       }
     ), () => {
       songStore.allSelected = false;
@@ -298,16 +297,26 @@ class HomePage extends React.Component {
               _item.selected = false
             ))
           }
+
           if (item.keyword !== last_keyword || item.songList.length === 0) {
             item.songList = [];
             isFull = true;
           }
+
+          if(item.songList.length === 0) {
+            this.setState(() => (
+              {
+                isEmpty: true
+              }
+            ))
+          }
         }
       });
       if (isFull) {
-        this.getMusicData();
-      }
-
+        if(this.state.keyword) {
+          this.getMusicData();
+        }
+      } 
     })
   }
 

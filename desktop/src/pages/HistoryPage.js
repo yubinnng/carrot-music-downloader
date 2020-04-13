@@ -13,7 +13,8 @@ class HistoryPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      listData: []
+      listData: [],
+      isEmpty: false,
     }
     this.renderList = this.renderList.bind(this);
     this.getListData = this.getListData.bind(this);
@@ -22,6 +23,11 @@ class HistoryPage extends Component {
 
   componentDidMount() {
     this.getListData();
+    this.timer = setInterval(this.getListData, 2000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
   }
 
   render() {
@@ -67,9 +73,23 @@ class HistoryPage extends Component {
               <p>歌手</p>
               <p>专辑</p>
             </Row>
-            <div className="list-content">
-              {this.renderList()}
-            </div>
+            {this.state.listData.length > 0 ?
+              <div className="list-content">
+                {this.renderList()}
+              </div>:
+              <div className="list-content img-content">
+                <div>
+                  {
+                    this.state.isEmpty ?
+                      <img src = {require("../assets/icon/empty.svg")} alt = ""/>
+                      :
+                      <img className = "loading-img" src = {require("../assets/icon/loading.svg")} alt = ''/>
+                  }
+
+                </div>
+              </div>
+            }
+
           </Column>
         </Column>
       </Column>
@@ -117,6 +137,13 @@ class HistoryPage extends Component {
               listData: res.data
             }
             ))
+          if(res.data.length === 0) {
+            this.setState(() => (
+              {
+                isEmpty: true
+              }
+            ))
+          }
         }
       })
   }
@@ -137,7 +164,5 @@ class HistoryPage extends Component {
   }
 
 }
-
-
 
 export default HistoryPage;
