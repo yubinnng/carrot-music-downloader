@@ -117,16 +117,16 @@ electron-builder
    ```
 3. 在build下
    ```
-   yarn add electron --dev
+   yarn add electron@8.2.0 --dev
    // 或者 npm install electron --save-dev
    ```
 4. 安装electron-builder(建议全局安装)
    ```
-    npm install -g electron-builder
-    // 或者 yarn global add electron-builder
+   yarn global add electron-builder
+    // 或者 npm install -g electron-builder
    ```   
 5. 在build下
     
-    ```
-    electron-builder --win --x64
-    ```
+   ```
+   electron-builder --win --dir
+   ```
