@@ -95,10 +95,6 @@ class DownloadHistory:
         """
         增加下载记录
         """
-        history = {
-            'song': song,
-            'success': success
-        }
         # 加锁，防止读写文件线程不安全
         with DownloadHistory._lock:
             # 若文件不存在则创建
@@ -108,7 +104,7 @@ class DownloadHistory:
 
             with open(DownloadHistory._file_path, 'a', encoding='utf-8') as file:
                 singers_text = ','.join(song.singers)
-                text = f'{song.id}---{song.name}---{singers_text}---{song.album}\n'
+                text = f'{song.id}---{song.name}---{singers_text}---{song.album}---{success}\n'
                 file.write(text)
 
     @staticmethod
@@ -125,9 +121,16 @@ class DownloadHistory:
                     for line in lines:
                         line = line.replace('\n', '')
                         items = line.split('---')
+
                         singers = items[2].split(',')
+                        success = bool(items[4])
                         song = Song(items[0], items[1], singers, items[3])
-                        results.append(song)
+
+                        history = {
+                            'song': song,
+                            'success': success
+                        }
+                        results.append(history)
                     return results
         return []
 
