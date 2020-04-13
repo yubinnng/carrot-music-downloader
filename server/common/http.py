@@ -6,6 +6,8 @@
 """
 import json
 import os
+import re
+
 import requests
 from contextlib import closing
 from common.common_class import ServerError
@@ -17,6 +19,11 @@ class JSONEncoder(json.JSONEncoder):
         return {k: v for k, v in o.__dict__.items() if not k.startswith("__")}
 
 
+def validate_title(title):
+    rstr = r"[\/\\\:\*\?\"\<\>\|]"  # '/ \ : * ? " < > |'
+    new_title = re.sub(rstr, "_", title)  # 替换为下划线
+    return new_title
+
 def download_and_save_file(file_name, save_path, download_url, headers=None, stream=True, verify=False):
     """
     下载并保存文件
@@ -26,7 +33,7 @@ def download_and_save_file(file_name, save_path, download_url, headers=None, str
 
     with closing(requests.get(download_url, stream=True, verify=False)) as response:
         if response.status_code == 200:
-            with open(os.path.join(save_path, file_name), "wb") as f:
+            with open(os.path.join(save_path, validate_title(file_name)), "wb") as f:
                 for chunk in response.iter_content(chunk_size=1024):
                     if chunk:
                         f.write(chunk)
