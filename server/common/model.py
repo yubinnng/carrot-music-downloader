@@ -123,7 +123,7 @@ class DownloadHistory:
                         items = line.split('---')
 
                         singers = items[2].split(',')
-                        success = bool(items[4])
+                        success = True if items[4] == 'True' else False
                         song = Song(items[0], items[1], singers, items[3])
 
                         history = {
