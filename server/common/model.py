@@ -4,14 +4,12 @@
 @time: 2020/03/23
 @description: 
 """
-import json
 import os
-
-from flask.json import jsonify
-from common.common_class import BaseClass
-from common.http import JSONEncoder
 from typing import List
+from flask.json import jsonify
 from threading import Lock
+
+from common.common_class import BaseClass
 
 
 # 响应结果包装类
@@ -88,7 +86,7 @@ class Song(BaseClass):
 # 下载记录
 class DownloadHistory:
     # 下载记录文件保存位置
-    _file_path = './download_history.json'
+    _file_path = './download_history.txt'
 
     _lock = Lock()
 
@@ -108,16 +106,10 @@ class DownloadHistory:
                 with open(DownloadHistory._file_path, 'w', encoding='utf-8'):
                     pass
 
-            with open(DownloadHistory._file_path, 'r+', encoding='utf-8') as json_file:
-                empty = os.path.getsize(DownloadHistory._file_path) == 0
-                if empty:
-                    history_json = []
-                else:
-                    history_json = json.load(json_file)
-                history_json.append(history)
-                # 将文件指针移到开头
-                json_file.seek(0)
-                json.dump(history_json, json_file, ensure_ascii=False, cls=JSONEncoder)
+            with open(DownloadHistory._file_path, 'a', encoding='utf-8') as file:
+                singers_text = ','.join(song.singers)
+                text = f'{song.id}---{song.name}---{singers_text}---{song.album}\n'
+                file.write(text)
 
     @staticmethod
     def get_all() -> list:
@@ -126,11 +118,18 @@ class DownloadHistory:
         """
         exist = os.path.exists(DownloadHistory._file_path)
         if exist:
-            with open(DownloadHistory._file_path, 'r', encoding='utf-8') as json_file:
+            with open(DownloadHistory._file_path, 'r', encoding='utf-8') as file:
                 if exist:
-                    return json.load(json_file)
-        else:
-            return []
+                    results = []
+                    lines = file.readlines()
+                    for line in lines:
+                        line = line.replace('\n', '')
+                        items = line.split('---')
+                        singers = items[2].split(',')
+                        song = Song(items[0], items[1], singers, items[3])
+                        results.append(song)
+                    return results
+        return []
 
     @staticmethod
     def clear_all():
