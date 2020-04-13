@@ -73,7 +73,9 @@ class Song(BaseClass):
     # 专辑
     album: str
 
-    def __init__(self, id=None, name=None, singers=None, album=None) -> None:
+    def __init__(self, id='', name='', singers=[], album='') -> None:
+        if singers is None:
+            singers = list()
         self.id = id
         self.name = name
         self.singers = singers

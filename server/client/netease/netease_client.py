@@ -7,6 +7,8 @@
 import requests
 import logging
 from bs4 import BeautifulSoup
+
+from common.common_class import ServerError
 from common.model import SearchForm, Song, DownloadHistory
 from common.constant import *
 from common.http import download_and_save_file
@@ -37,7 +39,6 @@ class NeteaseClient(BaseClient):
         params = {
             's': search_form.keyword,
             'type': 1,
-            'limit': search_form.size
         }
         response = self.__requests(self.__search_url, params)
         results = []
@@ -56,10 +57,13 @@ class NeteaseClient(BaseClient):
 
     # 参考文章：https://blog.csdn.net/qq_45437557/article/details/100064217
     def get_song_list(self, search_form: SearchForm) -> List[Song]:
-        url = self.__song_list_url + search_form.keyword
-        song_list_page = BeautifulSoup(requests.get(url, headers=self.__headers).content, "html.parser")
-        # 网易云歌单有防爬加密，只能获取到歌曲ID和歌名
-        song_list = song_list_page.find('ul', {'class': 'f-hide'}).find_all('a')
+        try:
+            url = self.__song_list_url + search_form.keyword
+            song_list_page = BeautifulSoup(requests.get(url, headers=self.__headers).content, "html.parser")
+            # 网易云歌单有防爬加密，只能获取到歌曲ID和歌名
+            song_list = song_list_page.find('ul', {'class': 'f-hide'}).find_all('a')
+        except:
+            song_list = []
 
         results = []
         for song_item in song_list:

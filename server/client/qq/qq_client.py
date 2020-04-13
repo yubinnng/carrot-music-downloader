@@ -7,7 +7,6 @@
 import json
 import logging
 import random
-import re
 from typing import List
 
 import requests
@@ -15,7 +14,7 @@ from bs4 import BeautifulSoup
 
 from client.basic_client import BaseClient
 from common.model import SearchForm, Song, DownloadHistory
-from common.constant import QQ
+from common.common_class import ServerError
 from common.http import download_and_save_file
 
 
@@ -57,11 +56,14 @@ class QQClient(BaseClient):
 
     # 参考方法：https://zhuanlan.zhihu.com/p/38184959
     def get_song_list(self, search_form: SearchForm) -> List[Song]:
-        resp = requests.get(self.__song_list_url_format.format(song_list_id= search_form.keyword), headers=self.__headers)
+        try:
+            resp = requests.get(self.__song_list_url_format.format(song_list_id= search_form.keyword), headers=self.__headers)
 
-        # 标准化返回来的数据
-        song_list_json = json.loads(resp.text.strip('playlistinfoCallback()[]'))
-        song_list_json = song_list_json['cdlist'][0]['songlist']
+            # 标准化返回来的数据
+            song_list_json = json.loads(resp.text.strip('playlistinfoCallback()[]'))
+            song_list_json = song_list_json['cdlist'][0]['songlist']
+        except:
+            song_list_json = []
 
         results = []
         for song_item in song_list_json:
