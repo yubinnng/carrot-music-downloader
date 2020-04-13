@@ -95,9 +95,9 @@ class HistoryPage extends Component {
               title = {item.success ? "下载成功" : "该歌曲暂不支持下载"}
               alt={item.success ? "下载成功" : "该歌曲暂不支持下载"}
             />
-            <p>{item.song.name}</p>
-            <p>{item.song.singers.join(" ")}</p>
-            <p>{item.song.album}</p>
+            <p title = {item.song.name}>{item.song.name}</p>
+            <p title = {item.song.singers.join(" ")}>{item.song.singers.join(" ")}</p>
+            <p title = {item.song.album}>{item.song.album}</p>
           </Row>
         )
       })

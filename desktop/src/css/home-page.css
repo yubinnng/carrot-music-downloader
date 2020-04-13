@@ -215,7 +215,7 @@
 }
 
 .music-item-content-header p:last-child {
-    margin-left: 42.3px;
+    margin-left: 98.3px;
 }
 
 .music-item-content div p {
@@ -244,12 +244,12 @@
 }
 
 .music-item-content div p:nth-child(3) {
-    width: 40px;
+    width: 100px;
 
     margin-left: 38px;
 }
 
 .music-item-content div p:last-child {
     width: 120px;
-    margin-left: 38px;
+    margin-left: 33px;
 }

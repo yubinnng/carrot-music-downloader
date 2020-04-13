@@ -184,7 +184,7 @@ class HomePage extends React.Component {
       })
         .then((resp) => {
           if (resp.code === 200) {
-            Toast.info("下载成功")
+            Toast.info("开始下载")
           }
         })
     }
@@ -353,9 +353,9 @@ class HomePage extends React.Component {
                 }}
                 src={_item.selected ? require('../assets/icon/radio.selected.svg') : require('../assets/icon/radio.svg')}
                 alt=''/>
-              <p>{_item.name}</p>
-              <p>{_item.singers.join(' ')}</p>
-              <p>{_item.album}</p>
+              <p title = {_item.name}>{_item.name}</p>
+              <p title = {_item.singers.join(" ")}>{_item.singers.join(' ')}</p>
+              <p title = {_item.album}>{_item.album}</p>
             </Row>
           )
         })
