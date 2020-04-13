@@ -90,7 +90,11 @@ class HistoryPage extends Component {
             className="content-border list-item"
             justify="flex-start"
           >
-            <img src={item.success ? require('../assets/icon/download-success.svg') : require('../assets/icon/download-fail.svg')}/>
+            <img
+              src={item.success ? require('../assets/icon/download-success.svg') : require('../assets/icon/download-fail.svg')}
+              title = {item.success ? "下载成功" : "该歌曲暂不支持下载"}
+              alt={item.success ? "下载成功" : "该歌曲暂不支持下载"}
+            />
             <p>{item.song.name}</p>
             <p>{item.song.singers.join(" ")}</p>
             <p>{item.song.album}</p>

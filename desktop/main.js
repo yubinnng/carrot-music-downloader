@@ -8,6 +8,8 @@ const {app, BrowserWindow, ipcMain, shell} = require("electron");
 
 // 保持 window 对象的全局引用，避免 Javascript 对象被来及回收时，窗口被自动关闭
 let mainWindow;
+const path = require('path');
+const url = require('url');
 
 function createWindow() {
 
@@ -22,7 +24,12 @@ function createWindow() {
   });
 
   // 加载应用 ---- 适用于 react 项目
-  mainWindow.loadURL("http://localhost:3000/");
+  mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, './index.html'),
+    protocol: 'file:',
+    slashes: true
+  }));
+
 
   // 关闭 window 时触发下列事件
   mainWindow.on("closed", () => {
@@ -66,7 +73,7 @@ ipcMain.on("open-url", (event, url) => {
 let serverProc;
 
 const createServerProc = () => {
-  let server_app = '../release/server/server';
+  let server_app = '../../server/server';
   let suffix;
   switch (process.platform) {
     case 'win32':
