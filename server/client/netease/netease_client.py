@@ -8,7 +8,6 @@ import requests
 import logging
 from bs4 import BeautifulSoup
 
-from common.common_class import ServerError
 from common.model import SearchForm, Song, DownloadHistory
 from common.constant import *
 from common.http import download_and_save_file

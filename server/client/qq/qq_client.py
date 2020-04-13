@@ -14,7 +14,6 @@ from bs4 import BeautifulSoup
 
 from client.basic_client import BaseClient
 from common.model import SearchForm, Song, DownloadHistory
-from common.common_class import ServerError
 from common.http import download_and_save_file
 
 
