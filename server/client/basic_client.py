@@ -13,7 +13,7 @@ from common.model import SearchForm, Song
 class BaseClient:
 
     # 下载任务线程池
-    __download_pool = threadpool.ThreadPool(20)
+    __download_pool = threadpool.ThreadPool(5)
 
     @abc.abstractmethod
     def search_song(self, search_form: SearchForm) -> List[Song]:
