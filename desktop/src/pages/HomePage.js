@@ -10,7 +10,7 @@ import stores from "../store";
 import {get, post} from "../util/requests";
 import '../css/home-page.css';
 import {action} from "mobx";
-import {PATH_KEY} from "../config/variable";
+import {KEYWORD, PATH_KEY} from "../config/variable";
 
 const {ipcRenderer, remote} = window.electron;
 const {dialog} = remote;
@@ -25,7 +25,7 @@ class HomePage extends React.Component {
     this.state = {
       platform: songStore.platformList[0].platform,
       platformIndex: 0,
-      keyword: !!this.props.location.query ? this.props.location.query.keyword : '',
+      keyword: !!storage.session.get(KEYWORD) ? storage.session.get(KEYWORD) : "",
       save_path: storage.get(PATH_KEY) || "",
     };
     this.renderPlatformList = this.renderPlatformList.bind(this);
@@ -40,11 +40,10 @@ class HomePage extends React.Component {
   }
 
   componentDidMount() {
-    if(this.props.location.query) {
-      if(this.props.location.query.keyword !== last_keyword) {
+    if(storage.session.get(KEYWORD)) {
+      if(storage.session.get(KEYWORD) !== last_keyword) {
         this.onClickSearchBtn();
       }
-
     }
   }
 
@@ -128,10 +127,7 @@ class HomePage extends React.Component {
                 src={require('../assets/icon/download.svg')} title='下载' alt='下载'/>
               <img
                 onClick={() => {
-                  this.props.history.push({
-                    pathname: '/history',
-                    query: {keyword: this.state.keyword}
-                  })
+                  this.props.changePathname("/history")
                 }}
                 src={require('../assets/icon/history.svg')} title='历史记录' alt="历史记录"/>
             </Row>
@@ -278,6 +274,7 @@ class HomePage extends React.Component {
         if (resp.code === 200) {
           songStore.addResultList(platform, keyword, resp.data);
           last_keyword = keyword;
+          storage.session.set(KEYWORD, keyword);
         }
       })
   }

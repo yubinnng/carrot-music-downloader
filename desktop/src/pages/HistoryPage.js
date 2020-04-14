@@ -4,7 +4,7 @@
  */
 
 import React, {Component} from "react";
-import {Column, Header, Row, Toast} from "../component";
+import {Column, Row, Toast} from "../component";
 import "../css/history-page.css";
 import {del, get} from "../util/requests";
 
@@ -15,14 +15,10 @@ class HistoryPage extends Component {
     this.state = {
       listData: [],
       isEmpty: false,
-      keyword: !!this.props.location.query ? this.props.location.query.keyword : '',
     }
     this.renderList = this.renderList.bind(this);
     this.getListData = this.getListData.bind(this);
     this.clearList = this.clearList.bind(this);
-    this.handleKeyChange = this.handleKeyChange.bind(this);
-    this.onClickSearchBtn = this.onClickSearchBtn.bind(this);
-    this._onKeyUp = this._onKeyUp.bind(this);
   }
 
   componentDidMount() {
@@ -39,34 +35,25 @@ class HistoryPage extends Component {
       <Column
         className="wrapper"
       >
-        <Header
-          keyword = {this.state.keyword}
-          handleKeyChange = {this.handleKeyChange}
-          onClickSearchBtn = {this.onClickSearchBtn}
-          _onKeyUp = {this._onKeyUp}
-        />
         <Column
           className="history-page-content"
         >
           <Row
-            className="content-border history-page-header"
+            className="content-border drag history-page-header"
             justify="space-between"
           >
             <Row
-              className="back-container"
+              className="no-drag back-container"
               onClick={() => {
-                this.props.history.push({
-                  pathname: '/home',
-                  query: {keyword: this.state.keyword}
-                });
+                this.props.changePathname('/home');
               }}
             >
               <img src={require('../assets/icon/back.svg')} alt="返回" title="返回首页"/>
               <p>返回</p>
             </Row>
-            <p className="title">下载历史</p>
+            <p className="title no-drag">下载历史</p>
             <Row
-              className="delete-container"
+              className="no-drag delete-container"
               onClick = {this.clearList}
             >
               <p>清空</p>
@@ -108,45 +95,6 @@ class HistoryPage extends Component {
     );
   }
 
-  /**
-   * 监听回车事件
-   */
-  _onKeyUp(event) {
-    if(event.keyCode === 13) {
-      this.onClickSearchBtn();
-    }
-  }
-
-
-  /**
-   * 点击搜索按键
-   */
-  onClickSearchBtn(event) {
-    !!event && event.stopPropagation();
-    if(this.state.keyword) {
-      this.props.history.push({
-        pathname: '/home',
-        query: {keyword: this.state.keyword}
-      });
-    }else {
-      Toast.info("搜索内容为空")
-    }
-  }
-
-  /**
-   * 处理keyword
-   * @param event
-   */
-  handleKeyChange(event) {
-    this.setState({
-      keyword: event.target.value
-    })
-  }
-
-  /**
-   * 渲染列表
-   * @returns {[]}
-   */
   renderList() {
     let arr = [];
     if(this.state.listData.length > 0) {

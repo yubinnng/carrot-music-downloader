@@ -3,11 +3,11 @@
  * @since 2020/4/14
  */
 
-const HISTORY_SEARCH = 'history-search';
+const KEYWORD = 'keyword';
 
 const PATH_KEY = "path";
 
 export {
-  HISTORY_SEARCH,
+  KEYWORD,
   PATH_KEY
 }

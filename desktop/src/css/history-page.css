@@ -6,7 +6,7 @@
 
 .history-page-header {
     width: 100%;
-    height: 50px;
+    height: 59px;
 }
 
 .history-page-header p {
@@ -46,7 +46,7 @@
 
 .history-list-container {
     width: 100%;
-    height: 390px;
+    height: 440px;
 
     overflow: hidden;
 }
