@@ -15,10 +15,14 @@ class HistoryPage extends Component {
     this.state = {
       listData: [],
       isEmpty: false,
+      keyword: !!this.props.location.query ? this.props.location.query.keyword : '',
     }
     this.renderList = this.renderList.bind(this);
     this.getListData = this.getListData.bind(this);
     this.clearList = this.clearList.bind(this);
+    this.handleKeyChange = this.handleKeyChange.bind(this);
+    this.onClickSearchBtn = this.onClickSearchBtn.bind(this);
+    this._onKeyUp = this._onKeyUp.bind(this);
   }
 
   componentDidMount() {
@@ -35,7 +39,12 @@ class HistoryPage extends Component {
       <Column
         className="wrapper"
       >
-        <Header/>
+        <Header
+          keyword = {this.state.keyword}
+          handleKeyChange = {this.handleKeyChange}
+          onClickSearchBtn = {this.onClickSearchBtn}
+          _onKeyUp = {this._onKeyUp}
+        />
         <Column
           className="history-page-content"
         >
@@ -46,7 +55,10 @@ class HistoryPage extends Component {
             <Row
               className="back-container"
               onClick={() => {
-                this.props.changeHref("./home")
+                this.props.history.push({
+                  pathname: '/home',
+                  query: {keyword: this.state.keyword}
+                });
               }}
             >
               <img src={require('../assets/icon/back.svg')} alt="返回" title="返回首页"/>
@@ -94,6 +106,41 @@ class HistoryPage extends Component {
         </Column>
       </Column>
     );
+  }
+
+  /**
+   * 监听回车事件
+   */
+  _onKeyUp(event) {
+    if(event.keyCode === 13) {
+      this.onClickSearchBtn();
+    }
+  }
+
+
+  /**
+   * 点击搜索按键
+   */
+  onClickSearchBtn(event) {
+    !!event && event.stopPropagation();
+    if(this.state.keyword) {
+      this.props.history.push({
+        pathname: '/home',
+        query: {keyword: this.state.keyword}
+      });
+    }else {
+      Toast.info("搜索内容为空")
+    }
+  }
+
+  /**
+   * 处理keyword
+   * @param event
+   */
+  handleKeyChange(event) {
+    this.setState({
+      keyword: event.target.value
+    })
   }
 
   /**

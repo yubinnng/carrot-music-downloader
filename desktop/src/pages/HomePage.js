@@ -10,13 +10,13 @@ import stores from "../store";
 import {get, post} from "../util/requests";
 import '../css/home-page.css';
 import {action} from "mobx";
+import {PATH_KEY} from "../config/variable";
 
 const {ipcRenderer, remote} = window.electron;
 const {dialog} = remote;
 const {songStore, storage} = stores;
 
 let last_keyword = '';
-const PATH_KEY = "path";
 
 @observer
 class HomePage extends React.Component {
@@ -25,7 +25,7 @@ class HomePage extends React.Component {
     this.state = {
       platform: songStore.platformList[0].platform,
       platformIndex: 0,
-      keyword: '',
+      keyword: !!this.props.location.query ? this.props.location.query.keyword : '',
       save_path: storage.get(PATH_KEY) || "",
     };
     this.renderPlatformList = this.renderPlatformList.bind(this);
@@ -37,6 +37,15 @@ class HomePage extends React.Component {
     this.getMusicData = this.getMusicData.bind(this);
     this.onClickDownloadBtn = this.onClickDownloadBtn.bind(this);
     this._onKeyUp = this._onKeyUp.bind(this);
+  }
+
+  componentDidMount() {
+    if(this.props.location.query) {
+      if(this.props.location.query.keyword !== last_keyword) {
+        this.onClickSearchBtn();
+      }
+
+    }
   }
 
   render() {
@@ -119,7 +128,10 @@ class HomePage extends React.Component {
                 src={require('../assets/icon/download.svg')} title='下载' alt='下载'/>
               <img
                 onClick={() => {
-                  this.props.changeHref("./history")
+                  this.props.history.push({
+                    pathname: '/history',
+                    query: {keyword: this.state.keyword}
+                  })
                 }}
                 src={require('../assets/icon/history.svg')} title='历史记录' alt="历史记录"/>
             </Row>
@@ -233,8 +245,6 @@ class HomePage extends React.Component {
       });
     }
 
-
-
   }
 
   /**
@@ -252,8 +262,14 @@ class HomePage extends React.Component {
   /**
    * 获取音乐数据
    */
+  @action
   getMusicData() {
     const {platform, keyword} = this.state;
+    songStore.resultList.forEach(item => {
+      if(item.platform ===  platform) {
+        item.songList = []
+      }
+    })
     get('/api/search', {
       platform,
       keyword,

@@ -8,8 +8,10 @@ const {app, BrowserWindow, ipcMain, shell} = require("electron");
 
 // 保持 window 对象的全局引用，避免 Javascript 对象被来及回收时，窗口被自动关闭
 let mainWindow;
-const path = require('path');
-const url = require('url');
+const url = require("url");
+const path = require("path");
+
+const goTheLock = app.requestSingleInstanceLock();
 
 function createWindow() {
 
@@ -22,6 +24,8 @@ function createWindow() {
       nodeIntegration: true
     }
   });
+
+
 
   // 加载应用 ---- 适用于 react 项目
   mainWindow.loadURL(url.format({
@@ -36,6 +40,19 @@ function createWindow() {
     mainWindow = null;
   });
 
+
+
+}
+
+if(!goTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    if(mainWindow) {
+      if(mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.focus();
+    }
+  })
 }
 
 // 当 electron 完成初始化并准备创建浏览器窗口时调用此方法
