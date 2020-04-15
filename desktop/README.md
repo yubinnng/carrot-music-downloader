@@ -86,7 +86,7 @@ electron-builder
    ```
    yarn build/npm run build
    ```
-2. 进入build文件下，新建main.js(复制根目录下)，新建package.json
+2. 复制根目录下的main.js到build，进入build文件下，新建package.json，内容如下：
    ```
    {
      "name": "carrot-music-downloader",
@@ -104,17 +104,6 @@ electron-builder
        }
      }
    }
-   ```
-   ```
-   // main.js
-    const url = require("url");
-   ....
-     mainWindow.loadURL(url.format({
-       pathname: path.join(__dirname, './index.html'),
-       protocol: 'file:',
-       slashes: true
-     }));
-   ```
 3. 在build下
    ```
    yarn add electron@8.2.0 --dev
