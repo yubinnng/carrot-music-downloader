@@ -14,6 +14,7 @@
 
 ## 下载
 请到项目[release](https://github.com/Carrot-Software/carrot-music-downloader/releases)页面进行对应版本下载
+
 或者使用网盘下载：[https://tc5.us/file/21158285-437735009](https://tc5.us/file/21158285-437735009)
 
 ## 跨平台
