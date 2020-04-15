@@ -11,7 +11,12 @@
 | 线程池   | threadpool     |
 | 加解密   | pycryptodome   |
 
+## 扩展性
+
+添加平台需要继承`BaseClient`并实现其中的抽象方法，之后将该平台的实例化对象在添加到client包的`__init__.py`中的`client_dict`即可。
+
 ## 打包
+
 ~~~bash
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 pyinstaller -D -y --clean --distpath ../release -n server main.py
