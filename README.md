@@ -19,9 +19,11 @@
 
 或者使用网盘下载：[https://tc5.us/file/21158285-437735009](https://tc5.us/file/21158285-437735009)
 
-## 跨平台
+## 跨平台与扩展新
 
-由于项目采用Electron + Python，所以支持跨平台，若release中没有您需要的平台，您可以手动打包，打包流程分别位于：desktop与server目录的README.md中
+由于项目采用Electron + Python，所以支持跨平台，若release中没有您需要的平台，您可以手动打包。
+
+前端与服务端详细介绍分别位于：desktop与server目录的README.md中
 
 ## 应用截图
 
