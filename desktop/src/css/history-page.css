@@ -1,0 +1,136 @@
+.history-page-content {
+    width: 100%;
+
+    overflow: hidden;
+}
+
+.history-page-header {
+    width: 100%;
+    height: 59px;
+
+    background-color: #5A5A5A;
+}
+
+.history-page-header p {
+    font-family: Semibold;
+    font-size: 15px;
+    font-weight: bolder;
+    color: #ffffff;
+}
+
+.history-page-header .back-container {
+    margin-left: 16.4px;
+
+    cursor: pointer;
+}
+
+.history-page-header .delete-container {
+    margin-right: 16.8px;
+
+    cursor: pointer;
+}
+
+.history-page-header .back-container img {
+    width: 19.62px;
+    height: 17.78px;
+}
+
+.history-page-header .back-container p {
+    margin-left: 9px;
+}
+
+.history-page-header .delete-container img {
+    width: 18.94px;
+    height: 18px;
+
+    margin-left: 12.3px;
+}
+
+.history-list-container {
+    width: 100%;
+    height: 440px;
+
+    overflow: hidden;
+}
+
+.history-list-container .header {
+    width: 100%;
+    height: 24px;
+
+    border-top: none;
+}
+
+.history-list-container .header p {
+    height: 25px;
+    line-height: 25px;
+
+    font-family: Semibold;
+    font-size: 13px;
+    font-weight: bolder;
+
+    padding-left: 6.9px;
+
+    border-left: 1px solid #AEABAB;
+}
+
+.history-list-container .header p:first-child {
+    margin-left: 32.2px;
+}
+
+.history-list-container .header p:nth-child(2) {
+    margin-left: 227.2px;
+}
+
+.history-list-container .header p:last-child {
+    margin-left: 149.3px;
+}
+
+.history-list-container .list-content {
+    width: 100%;
+    height: 385px;
+
+    overflow: auto;
+}
+
+.history-list-container .list-content .list-item {
+    width: 100%;
+    height: 25px;
+
+    border-left: none;
+    border-right: none;
+}
+
+.history-list-container .list-content .list-item img {
+    width: 15.06px;
+    height: 15.06px;
+
+    margin-left: 11px;
+}
+
+.history-list-container .list-content .list-item p {
+    font-family: Semibold;
+    font-size: 13px;
+    font-weight: bolder;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.history-list-container .list-content .list-item p:nth-child(2) {
+    width: 240px;
+
+    margin-left: 14.9px;
+}
+
+.history-list-container .list-content .list-item p:nth-child(3) {
+    width: 170px;
+
+    margin-left: 46px;
+}
+
+.history-list-container .list-content .list-item p:last-child {
+    width: 130px;
+
+    margin-left: 14px;
+}
