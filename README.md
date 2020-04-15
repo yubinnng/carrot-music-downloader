@@ -14,7 +14,7 @@
 
 ## 下载
 
-请到项目[release](https://github.com/Carrot-Software/carrot-lock/releases)页面进行对应版本下载
+请到项目[release](https://github.com/Carrot-Software/carrot-music-downloader/releases)页面进行对应版本下载
 
 ## 跨平台
 
