@@ -1,5 +1,9 @@
 # Python Server
 
+## 鸣谢
+本项目Python爬虫部分代码借鉴于：https://github.com/CharlesPikachu/Music-Downloader
+感谢开源社区
+
 ## 框架选择
 
 | 类型     | 框架名         |
