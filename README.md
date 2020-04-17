@@ -14,8 +14,9 @@
 
 目前对接了`网易云音乐`以及`QQ音乐`，由于出色的扩展性，今后会不定期更新，同时非常欢迎开源共建以及在Issues中提交您的宝贵建议。
 
-## 下载
-请到项目[release](https://github.com/Carrot-Software/carrot-music-downloader/releases)页面进行对应版本下载
+## 下载&安装
+请到项目[release](https://github.com/Carrot-Software/carrot-music-downloader/releases)页面进行对应版本下载。
+下载完成后进行解压，进软件根目录下的desktop\win-unpacked，将carrot-music-downloader.exe的快捷方式发送至桌面，运行即可，无需安装。
 
 或者使用网盘下载：[https://tc5.us/file/21158285-437735009](https://tc5.us/file/21158285-437735009)
 
